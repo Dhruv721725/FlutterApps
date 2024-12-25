@@ -8,7 +8,18 @@ class SecondPage extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         title: Text("Page2"),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.blue,
+      ),
+      drawer: Drawer(
+        backgroundColor: const Color.fromARGB(200, 33, 149, 243),
+        child: Column(
+          children: [
+            //? DrawerHeader(
+            //? ),
+            ListTile(
+            ),
+          ]
+        ),
       ),
       body:Center(
         child:ElevatedButton(

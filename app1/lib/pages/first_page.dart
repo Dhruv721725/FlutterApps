@@ -10,6 +10,10 @@ class FirstPage extends StatelessWidget {
         title: Text("Page1"),
         backgroundColor: Colors.blue,
       ),
+      drawer: Drawer(
+        backgroundColor: const Color.fromARGB(200, 33, 149, 243),
+
+      ),
       body:Center(
         child:ElevatedButton(
           onPressed: ()=>{
