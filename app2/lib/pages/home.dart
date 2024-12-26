@@ -5,7 +5,9 @@ class Home extends StatelessWidget{
   Widget build(BuildContext context) {
     return Center(
       child:Container(
+        padding: EdgeInsets.all(100),
         child: Text("Home"),
+        color: const Color.fromARGB(255, 180, 50, 130),
       ),
     );
   }

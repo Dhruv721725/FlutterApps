@@ -73,7 +73,9 @@ class _UIState extends State<UI> {
             ],
           ),
         ),
-        body:Center(child:_Pages[2]),
+        
+        body:Center(child:_Pages[_currentindex]),
+        
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -89,8 +91,11 @@ class _UIState extends State<UI> {
               label: "Settings"
               ),
           ],
+          
           onTap: _navigateBottomBar,
-          currentIndex: 2,
+          
+          currentIndex: _currentindex,
+        
         ),
       );
   }
