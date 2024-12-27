@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/pages/todo_page.dart';
+import 'package:todoapp/util/dialogbox.dart';
 import 'package:todoapp/util/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,14 +9,104 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  List _todos=[
-    ["my todos",true],
-    ["exercise",true],
-    ["gfg",true],
-    ["flutter",true],
+  TextEditingController controller=new TextEditingController();
+  TextEditingController editController=new TextEditingController();
+  List todos=[
+    ["gfg",false],
+    ["flutter",false],
   ];
 
+  void CheckChange(int index){
+    setState(() {
+      todos[index][1]=todos[index][1]==false?true:false;
+    });
+  }
+
+  void onSave(){
+    String text= controller.text.trim();
+    setState(() {
+      if(text!=""){
+        todos.add([text,false]);
+      }
+    });
+    controller.value=TextEditingValue.empty;
+    Navigator.of(context).pop();
+  }
+
+  void onDelete(int index){
+    setState(() {
+      todos.removeAt(index);
+    });
+  }
+
+  void onEdit(int index){
+    editController.value=TextEditingValue(text: todos[index][0]);
+    showDialog(
+      context: context, 
+      builder: (context){
+        return AlertDialog(
+          backgroundColor: Colors.orange,
+          content: Container(
+            height: 120,
+            width: 180,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.orange,
+                    hintText: "Enter todo...",
+                  ),
+                  controller: editController,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MaterialButton(
+                      onPressed:(){
+                        setState(() {
+                          todos[index][0]=editController.text;
+                        });
+                        Navigator.of(context).pop();
+                        editController.value=TextEditingValue.empty;
+                      },
+                      child: Text("Save"),
+                      color: Colors.orangeAccent,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                    ),
+                    MaterialButton(
+                      onPressed:(){
+                        Navigator.of(context).pop();
+                        editController.value=TextEditingValue.empty;
+                      },
+                      child: Text("Cancel"),
+                      color: Colors.orangeAccent,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ],
+                )
+              ]
+            ),
+          )
+        );
+      }
+      );
+  }
+
+  void onCancel(){
+    controller.value=TextEditingValue.empty;
+    Navigator.of(context).pop();
+  }
+  
+  void addTodo(){
+    showDialog(
+      context: context, 
+      builder: (context){
+        return DialogBox(controller:controller, onSave: onSave, onCancel: onCancel,);
+      },
+      );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +121,23 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Colors.orangeAccent,
       body: ListView.builder(
-        itemBuilder: itemBuilder
+        itemCount: todos.length,
+        itemBuilder:(context, index){
+          return TodoTile(
+            todo: todos[index][0],
+            todoDone: todos[index][1],
+            onchanged: (p0) {
+              CheckChange(index);
+            },
+            onDelete: (context){onDelete(index);} ,
+            onEdit: (context){onEdit(index);},
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addTodo,
+        child: Icon(Icons.add),
+        backgroundColor: Colors.orange,
       ),
     );
   }
