@@ -10,8 +10,8 @@ class TodoButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
-      child: Text(text),
-      color: Colors.orangeAccent,
+      child: Text(text,style: TextStyle(color:Colors.white70),),
+      color: Colors.purpleAccent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
       );
   }

@@ -37,7 +37,7 @@ class TodoTile extends StatelessWidget{
         padding: EdgeInsets.all(16),
         margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
         decoration: BoxDecoration(
-          color: Colors.orange,
+          color: Colors.purple,
           borderRadius: BorderRadius.all(Radius.elliptical(12, 12))
 
         ),
@@ -46,17 +46,19 @@ class TodoTile extends StatelessWidget{
           children: [
             Checkbox(
               activeColor: Colors.black,
-              checkColor: Colors.orange,
+              checkColor: Colors.purple,
               value: todoDone, 
               onChanged: onchanged
               ),
             Text("|", style: TextStyle(fontSize:20),),
-            Text(
+            Expanded(child:Text(
               todo,
               style: TextStyle(
                 decoration: islined(),
+                color: Colors.white70,
+                decorationColor: Colors.white70
               ),
-            ),
+            )),
           ],
         )      
       )
