@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:todoapp/data/database.dart';
-import 'package:todoapp/util/dialogbox.dart';
-import 'package:todoapp/util/todo_tile.dart';
-import 'package:todoapp/main.dart';
+import 'package:todo/data/database.dart';
+import 'package:todo/util/dialogbox.dart';
+import 'package:todo/util/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -143,7 +142,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: Text(
-          "Dhruv's To Dos 🌌",
+          "Toshiv's To Dos 🌌",
           style: TextStyle(
             fontWeight:FontWeight.w900,
             color: Colors.white70,

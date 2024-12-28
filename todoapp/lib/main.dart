@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:todoapp/pages/home_page.dart';
+import 'package:todo/pages/home_page.dart';
 
 void main() async{
 
