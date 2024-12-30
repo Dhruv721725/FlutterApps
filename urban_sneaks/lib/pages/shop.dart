@@ -29,7 +29,7 @@ class _ShopPageState extends State<ShopPage> {
           children:[
             // Search Bar
             Container(
-              margin: EdgeInsets.fromLTRB(25,10,25,10),
+              margin: EdgeInsets.symmetric(vertical: 10),
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
@@ -44,7 +44,7 @@ class _ShopPageState extends State<ShopPage> {
               ),
               ),
             // message
-            Padding(padding:EdgeInsets.fromLTRB(35, 10, 35, 10), 
+            Padding(padding:EdgeInsets.all(10), 
             child:Text(
               "Step into the wild—every sneaker tells a story, every trail becomes an adventure.",
               textAlign:TextAlign.center,
@@ -54,25 +54,23 @@ class _ShopPageState extends State<ShopPage> {
               )
             ),
             //pics
-            Padding(padding: EdgeInsets.symmetric(horizontal:25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Hot Picks 🔥",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  ),
-                  ),
-                  Text("see all",
-                  style:TextStyle(
-                    color: Colors.blue
-                  ) ,
-                  )
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Hot Picks 🔥",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+                ),
+                Text("see all",
+                style:TextStyle(
+                  color: Colors.blue
+                ) ,
+                )
+              ],
             ),
-        
+          
             const SizedBox(height: 10,),
         
             Expanded(child: ListView.builder(

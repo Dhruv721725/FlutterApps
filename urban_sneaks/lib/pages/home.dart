@@ -43,7 +43,10 @@ class _HomePageState extends State<HomePage> {
 
       backgroundColor: Colors.grey[300],
       
-      body: _pages[_selectedIndex],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25), 
+        child: _pages[_selectedIndex]
+        ),
       
       bottomNavigationBar: BottomNavBar(
         onTabChange: (index) =>navigateBottomBar(index),
