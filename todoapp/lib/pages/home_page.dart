@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: Text(
-          "Toshiv's To Dos 🌌",
+          "To Dos 🌌",
           style: TextStyle(
             fontWeight:FontWeight.w900,
             color: Colors.white70,
