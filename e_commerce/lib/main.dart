@@ -4,6 +4,7 @@ import 'package:e_commerce/pages/cart_page.dart';
 import 'package:e_commerce/pages/home_page.dart';
 import 'package:e_commerce/pages/intro_page.dart';
 import 'package:e_commerce/pages/shop_page.dart';
+import 'package:e_commerce/themes/dark_mode.dart';
 import 'package:e_commerce/themes/light_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       title: "E-Commerce",
       home: IntroPage(),
-      theme: lightMode,
+      theme: darkMode,
       routes: {
         '/intro_page':(context)=> IntroPage(),
         '/shop_page':(context)=>ShopPage(),
