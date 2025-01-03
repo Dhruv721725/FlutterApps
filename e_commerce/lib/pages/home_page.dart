@@ -9,8 +9,6 @@ class HomePage extends StatelessWidget  {
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-
-      
     );
   }
 }

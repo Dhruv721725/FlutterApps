@@ -1,6 +1,7 @@
 import 'package:e_commerce/models/prduct.dart';
 import 'package:e_commerce/models/shop.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CompProductTile extends StatelessWidget {
   final Product product;
@@ -18,13 +19,13 @@ class CompProductTile extends StatelessWidget {
           MaterialButton(
             onPressed: (){
               Navigator.of(context).pop();
-              // Shop.addToCart(product);
+              context.read<Shop>().addToCart(product);
             },
             child: Text("Yes"),
             ),
           MaterialButton(
             onPressed: ()=>Navigator.of(context).pop(),
-            child: Text("Cancel"),
+            child: Text("No"),
             ),
         ],
       ),

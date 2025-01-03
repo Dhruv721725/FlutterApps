@@ -1,3 +1,4 @@
+import 'package:e_commerce/models/shop.dart';
 import 'package:e_commerce/pages/about_page.dart';
 import 'package:e_commerce/pages/cart_page.dart';
 import 'package:e_commerce/pages/home_page.dart';
@@ -5,9 +6,15 @@ import 'package:e_commerce/pages/intro_page.dart';
 import 'package:e_commerce/pages/shop_page.dart';
 import 'package:e_commerce/themes/light_mode.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Shop(), 
+      child:  MyApp()
+      )
+    );
 }
 
 class MyApp extends StatelessWidget{
