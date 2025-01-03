@@ -26,7 +26,9 @@ class MyApp extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       title: "E-Commerce",
       home: IntroPage(),
-      theme: darkMode,
+      theme: lightMode,
+      darkTheme: darkMode,
+      themeMode: ThemeMode.system,
       routes: {
         '/intro_page':(context)=> IntroPage(),
         '/shop_page':(context)=>ShopPage(),
