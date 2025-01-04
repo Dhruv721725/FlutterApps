@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:notes/database/database.dart';
 import 'package:notes/pages/dialog_page.dart';
+import 'package:notes/pages/drawer_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -87,15 +88,21 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+
+      drawer: DrawerPage(),
+
       body: Container(
         padding: EdgeInsets.all(25),
         child:ListView.builder(
           itemCount: db.notesList.length,
           itemBuilder: (context, index){
             return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).colorScheme.primary,
+              ),
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              padding: EdgeInsets.all(10),
-              color: Theme.of(context).colorScheme.primary,
+              padding: EdgeInsets.all(20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -105,13 +112,20 @@ class _HomePageState extends State<HomePage> {
                       GestureDetector(
                         onTap: ()=>onEdit(index),
                         child: Container(
-                          child: Icon(Icons.edit),
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(
+                            Icons.edit,
+                            color: Theme.of(context).colorScheme.inverseSurface,
+                          ),
                         ),
                       ),                  
                       GestureDetector(
                         onTap: ()=>onDel(db.notesList[index]),
                         child: Container(
-                          child: Icon(Icons.delete),
+                          child: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.inverseSurface,
+                          ),
                         ),
                       )
                     ],
@@ -125,11 +139,11 @@ class _HomePageState extends State<HomePage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed:onAdd,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         child: Icon(
           Icons.add,
           color: Theme.of(context).colorScheme.inversePrimary,
           ),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
     );
   }

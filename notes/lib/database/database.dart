@@ -11,11 +11,11 @@ class Database {
     ];
   }
 
-  void loadData()async{
-    notesList=await _notesBox.get("NotesList");
+  void loadData(){
+    notesList=_notesBox.get("NotesList");
   }
 
-  void updateData()async{
+  void updateData(){
     _notesBox.put("NotesList", notesList);
   }
 }
