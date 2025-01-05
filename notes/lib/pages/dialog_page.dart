@@ -29,13 +29,25 @@ class DialogPage extends StatelessWidget{
             Navigator.of(context).pop();
             controller.value=TextEditingValue.empty;
           }, 
-          child: Text("Save"),
+          child: Text(
+            "Save",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                // fontWeight: FontWeight.bold,
+              ),
+            ),
         ),
         MaterialButton(
           onPressed:(){
             Navigator.of(context).pop();
           }, 
-          child: Text("Cancel"),
+          child: Text(
+            "Cancel",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontWeight: FontWeight.bold,
+              ),
+          ),
         )
       ],
     );

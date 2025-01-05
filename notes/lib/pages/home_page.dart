@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:notes/database/database.dart';
 import 'package:notes/pages/dialog_page.dart';
@@ -81,9 +82,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(
           "Notes",
-          style: TextStyle(
+          // style: TextStyle(
+          //   color: Theme.of(context).colorScheme.inversePrimary,
+          //   fontWeight: FontWeight.bold,
+          // ),
+
+          style: GoogleFonts.dancingScript(
             color: Theme.of(context).colorScheme.inversePrimary,
             fontWeight: FontWeight.bold,
+            fontSize: 30,
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -106,7 +113,13 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: Text(db.notesList[index])),
+                  Expanded(
+                  child: Text(
+                  db.notesList[index],
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                  )),
                   Row(
                     children: [                      
                       GestureDetector(

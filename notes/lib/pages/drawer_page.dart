@@ -10,14 +10,25 @@ class DrawerPage extends StatelessWidget {
         children: [
           Container(
             child: DrawerHeader(
-              padding:EdgeInsets.all(50),
-              child: Text(
-                "Notes",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
+              padding:EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.edit,
+                    size: 50,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                  Text(
+                    "Notes",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30
+                    ),
+                  )
+                ],
+              )
             ),
           ),
 
@@ -30,7 +41,12 @@ class DrawerPage extends StatelessWidget {
                   Icons.home,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-                title: Text("Home"),
+                title: Text("Home",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
               ),
             ),
           ),
@@ -44,7 +60,12 @@ class DrawerPage extends StatelessWidget {
                   Icons.info,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-                title: Text("About"),
+                title: Text("About",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
@@ -58,7 +79,12 @@ class DrawerPage extends StatelessWidget {
                   Icons.settings,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-                title: Text("Settings"),
+                title: Text("Settings",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
               ),
             ),
           ),

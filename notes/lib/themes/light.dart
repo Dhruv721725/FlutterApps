@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 ThemeData lighMode=ThemeData(
   brightness: Brightness.light,
@@ -9,4 +10,5 @@ ThemeData lighMode=ThemeData(
     inversePrimary: Colors.grey.shade800,
     inverseSurface:Colors.grey.shade600 
   ),
+  textTheme: GoogleFonts.dancingScriptTextTheme(),
 );
