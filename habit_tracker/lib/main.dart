@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/database/habit_database.dart';
 import 'package:habit_tracker/pages/home_page.dart';
-import 'package:habit_tracker/theme/dark_mode.dart';
-import 'package:habit_tracker/theme/light_mode.dart';
 import 'package:habit_tracker/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await HabitDatabase.initialize();
+  await HabitDatabase().saveFirstLauncDate();
+  
   runApp(
     ChangeNotifierProvider(
       create: (context)=>ThemeProvider(),
