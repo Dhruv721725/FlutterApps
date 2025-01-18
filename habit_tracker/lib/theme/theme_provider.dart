@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/theme/dark_mode.dart';
-import 'package:habit_tracker/theme/light_mode.dart';
+import 'package:habit_tracker/theme/dark_theme.dart';
+import 'package:habit_tracker/theme/light_theme.dart';
 
-class ThemeProvider extends ChangeNotifier{
-  bool _isDark=false;
-  bool get isDark => _isDark;
-  
-  ThemeData currentTheme(){
-    return _isDark ? darkMode : lightMode;
-  }
-  void toggleMode(){
-    _isDark=!_isDark;
+class ThemeProvider extends ChangeNotifier {
+  ThemeData _currentTheme= lightMode;
+
+  ThemeData get currentTheme => _currentTheme;
+
+  bool get isDarkMode => (_currentTheme == darkMode);
+
+  void toggleTheme(){
+    if (_currentTheme==lightMode) {
+      _currentTheme=darkMode;
+    }else{
+      _currentTheme=lightMode;
+    }
     notifyListeners();
   }
 }

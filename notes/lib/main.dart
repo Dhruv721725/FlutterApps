@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:notes/pages/about_page.dart';
 import 'package:notes/pages/home_page.dart';
-import 'package:notes/pages/setting_page%20.dart';
-import 'package:notes/themes/dark.dart';
-import 'package:notes/themes/light.dart';
+import 'package:notes/pages/setting_page.dart';
 import 'package:notes/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 

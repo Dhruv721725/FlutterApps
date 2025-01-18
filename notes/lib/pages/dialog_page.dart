@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DialogPage extends StatelessWidget{
-  
-  final controller;
+
+  TextEditingController controller;
   Function() onSave;
   DialogPage({required this.controller, required this.onSave, super.key});
 
