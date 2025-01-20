@@ -16,6 +16,10 @@ class CompTile extends StatelessWidget{
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.white,
+          
+        )
       ),
       child: Image.asset(
         imagePath,

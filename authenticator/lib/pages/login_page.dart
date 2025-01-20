@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:authenticator/components/comp_button.dart';
 import 'package:authenticator/components/comp_textfield.dart';
 import 'package:authenticator/components/comp_tile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget{
@@ -11,6 +14,9 @@ class LoginPage extends StatelessWidget{
     TextEditingController loginIdController=new TextEditingController();
     TextEditingController passwordController=new TextEditingController();
 
+    void signUserIn()async{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: loginIdController.text, password: passwordController.text);
+    }
     return Scaffold(
       // body: Image.asset("lib/images/google_icon.png"),
       backgroundColor: Colors.grey[300],
@@ -57,9 +63,7 @@ class LoginPage extends StatelessWidget{
             // sign in button
             CompButton(
               text: "Sign In",
-              onTap: (){
-
-              },
+              onTap: signUserIn,
             ),
 
             SizedBox(height: 25,),
