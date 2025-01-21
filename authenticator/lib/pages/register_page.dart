@@ -4,17 +4,17 @@ import 'package:authenticator/components/comp_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget{
-  final Function()? onRegister;
-  LoginPage({required this.onRegister ,super.key});
-
+class RegisterPage extends StatefulWidget {
+  final Function()? onLogin;
+  RegisterPage({super.key, required this.onLogin});
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage>{
   TextEditingController loginIdController=new TextEditingController();
   TextEditingController passwordController=new TextEditingController();
+  TextEditingController confirmPasswordController=new TextEditingController();
   
   void showErrorMessage(String message){
     showDialog(
@@ -35,18 +35,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   
-  void signUserIn()async{
+  void signUserUp()async{
     showDialog(context: context, builder: (context){
       return const Center(
         child: CircularProgressIndicator(), 
       );
     });
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: loginIdController.text, 
-        password: passwordController.text
-      );
-      Navigator.pop(context);
+      if (passwordController.text==confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: loginIdController.text, 
+          password: passwordController.text
+        );
+        Navigator.pop(context);
+      }else{
+        Navigator.pop(context);
+        showErrorMessage("Password Mismatched");
+      }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       showErrorMessage(
@@ -54,7 +59,8 @@ class _LoginPageState extends State<LoginPage> {
         .map(
           (word)=>word[0].toUpperCase()+word.substring(1).toLowerCase()
         )
-        .join(" "));
+        .join(" ")
+      );
     }
   }
 
@@ -72,12 +78,12 @@ class _LoginPageState extends State<LoginPage> {
             // logo
             Icon(
               Icons.lock,
-              size: 150,
+              size: 100,
             ),
             SizedBox(height: 50,),
 
             // text
-            Text("Welcome back, you've been missed.",
+            Text("Let's create an account for you.",
               style: TextStyle(
                 color: Colors.grey[800],
                 fontSize: 16,
@@ -99,14 +105,22 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
             ),
             SizedBox(height: 10,),
+             
+            // confirm password
+            CompTextfield(
+              controller: confirmPasswordController,
+              hintText: "Confirm Password",
+              obscureText: true,
+            ),
+            SizedBox(height: 10,),
 
             // forgot password
             Text("Forgot Password?"),
             SizedBox(height: 25,),
             // sign in button
             CompButton(
-              text: "Sign In",
-              onTap: signUserIn,
+              text: "Sign Up",
+              onTap: signUserUp,
             ),
 
             SizedBox(height: 25,),
@@ -148,11 +162,11 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Not a member?"),
+                Text("Already a member?"),
                 SizedBox(width: 5,),
                 GestureDetector(
-                  onTap: widget.onRegister ,
-                  child: Text("Register now",
+                  onTap: widget.onLogin ,
+                  child: Text("Login now",
                     style: TextStyle(
                       color: Colors.blue,
                       fontWeight:FontWeight.bold,
