@@ -1,21 +1,33 @@
-import 'dart:io';
-
 import 'package:authenticator/components/comp_button.dart';
 import 'package:authenticator/components/comp_textfield.dart';
 import 'package:authenticator/components/comp_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget{
+class LoginPage extends StatefulWidget{
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     TextEditingController loginIdController=new TextEditingController();
     TextEditingController passwordController=new TextEditingController();
 
     void signUserIn()async{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: loginIdController.text, password: passwordController.text);
+      showDialog(context: context, builder: (context){
+        return const Center(
+          child: CircularProgressIndicator(), 
+        );
+      });
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: loginIdController.text, 
+        password: passwordController.text
+      );
+      Navigator.pop(context);
     }
     return Scaffold(
       // body: Image.asset("lib/images/google_icon.png"),
