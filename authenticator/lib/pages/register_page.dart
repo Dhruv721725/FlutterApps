@@ -1,6 +1,7 @@
 import 'package:authenticator/components/comp_button.dart';
 import 'package:authenticator/components/comp_textfield.dart';
 import 'package:authenticator/components/comp_tile.dart';
+import 'package:authenticator/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -112,10 +113,6 @@ class _RegisterPageState extends State<RegisterPage>{
               hintText: "Confirm Password",
               obscureText: true,
             ),
-            SizedBox(height: 10,),
-
-            // forgot password
-            Text("Forgot Password?"),
             SizedBox(height: 25,),
             // sign in button
             CompButton(
@@ -153,8 +150,12 @@ class _RegisterPageState extends State<RegisterPage>{
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CompTile(imagePath: "lib/images/google_icon.png"),
-                CompTile(imagePath: "lib/images/apple_icon.png"),
+                CompTile(
+                  onTap: ()=>AuthService().signInWithGoogle(),
+                  imagePath: "lib/images/google_icon.png"),
+                CompTile(
+                  onTap: ()=>{},
+                  imagePath: "lib/images/apple_icon.png"),
               ],
             ),
             SizedBox(height: 20,),

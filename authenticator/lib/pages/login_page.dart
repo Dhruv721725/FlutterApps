@@ -1,6 +1,7 @@
 import 'package:authenticator/components/comp_button.dart';
 import 'package:authenticator/components/comp_textfield.dart';
 import 'package:authenticator/components/comp_tile.dart';
+import 'package:authenticator/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -139,8 +140,14 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CompTile(imagePath: "lib/images/google_icon.png"),
-                CompTile(imagePath: "lib/images/apple_icon.png"),
+                CompTile(
+                  onTap:()=>AuthService().signInWithGoogle(), 
+                  imagePath: "lib/images/google_icon.png"
+                ),
+                CompTile(
+                  onTap:()=>{}, 
+                  imagePath: "lib/images/apple_icon.png"
+                ),
               ],
             ),
             SizedBox(height: 20,),
