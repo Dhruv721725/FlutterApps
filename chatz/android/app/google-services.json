@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "953570803727",
+    "project_id": "chatz-74",
+    "storage_bucket": "chatz-74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953570803727:android:e0439e2c0cdd5e0c0a637a",
+        "android_client_info": {
+          "package_name": "com.example.chatz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3nZQ9CUJq870kh_tEh6BgODuDco3g9qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

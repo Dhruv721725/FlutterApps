@@ -1,3 +1,4 @@
+import 'package:chatz/auth/auth_service.dart';
 import 'package:chatz/components/comp_button.dart';
 import 'package:chatz/components/comp_textfieldd.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,28 @@ class RegisterPage extends StatelessWidget {
   TextEditingController _emailController= new TextEditingController();
   TextEditingController _pwController= new TextEditingController();
   TextEditingController _cpwController= new TextEditingController();
+  Function()? onTap;
 
-  void register(){
-
-  }
+  RegisterPage({required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
+    void register(){
+      //  get auth service
+      if (_pwController.text!=_cpwController.text) {
+        showDialog(context: context, builder: (context)=>AlertDialog(
+          content: Text("Password miss-match", textAlign: TextAlign.center,),
+        ));
+      }else{
+        try {
+          AuthService()..signUpEmail(_emailController.text, _pwController.text);
+        } catch (e) {
+          showDialog(context: context, builder: (context)=>AlertDialog(
+            content: Text(e.runtimeType.toString(),textAlign: TextAlign.center,),
+          ));
+        }
+      }
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onSurface,
       body: Center(child: Column(
@@ -23,7 +39,7 @@ class RegisterPage extends StatelessWidget {
           Icon(Icons.message, size: 100,color: Theme.of(context).colorScheme.primary,),
           const SizedBox(height: 30,),
           // welcome back message
-          Text("Welcome back, you have been missed.",
+          Text("Welcome to our community.",
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 16
@@ -55,7 +71,7 @@ class RegisterPage extends StatelessWidget {
           SizedBox(height: 10,),
           
           // login button
-          CompButton(value: "Log In", onTap: register),
+          CompButton(value: "Register", onTap: register),
           SizedBox(height: 20,),
 
           // register now
@@ -64,7 +80,7 @@ class RegisterPage extends StatelessWidget {
             children: [
               Text("Already a member ? "),
               GestureDetector(
-                onTap: (){},
+                onTap: onTap,
                 child: Text("LogIn now", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
               )
             ],

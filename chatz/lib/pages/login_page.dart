@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+
+import 'package:chatz/auth/auth_service.dart';
 import 'package:chatz/components/comp_button.dart';
 import 'package:chatz/components/comp_textfieldd.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +9,29 @@ class LoginPage extends StatelessWidget{
 
   TextEditingController _emailController= new TextEditingController();
   TextEditingController _pwController= new TextEditingController();
+  Function()? onTap;
 
-  void logIn(){
-
-  }
+  LoginPage({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+
+    void logIn()async{
+      // auth service 
+      final authService=new AuthService();
+
+      try{
+        await authService.signInEmail(_emailController.text, _pwController.text);
+      }catch(e){
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text(e.toString().split(":")[1].trim().split("-").map((e)=>e[0].toUpperCase()+e.substring(1).toLowerCase()).join(" "),
+              textAlign: TextAlign.center,
+            ),
+          );
+        });
+      }
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onSurface,
       body: Center(child: Column(
@@ -56,7 +75,7 @@ class LoginPage extends StatelessWidget{
             children: [
               Text("Not a member ? "),
               GestureDetector(
-                onTap: (){},
+                onTap: onTap,
                 child: Text("Register now", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
               )
             ],
