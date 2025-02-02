@@ -1,5 +1,5 @@
 
-import 'package:chatz/auth/auth_gate.dart';
+import 'package:chatz/services/auth/auth_gate.dart';
 import 'package:chatz/firebase_options.dart';
 import 'package:chatz/theme/light_mode.dart';
 import 'package:firebase_core/firebase_core.dart';

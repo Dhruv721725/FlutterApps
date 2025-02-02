@@ -1,6 +1,6 @@
 import 'dart:js_interop';
 
-import 'package:chatz/auth/auth_service.dart';
+import 'package:chatz/services/auth/auth_service.dart';
 import 'package:chatz/components/comp_button.dart';
 import 'package:chatz/components/comp_textfieldd.dart';
 import 'package:flutter/material.dart';
