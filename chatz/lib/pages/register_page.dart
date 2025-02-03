@@ -8,6 +8,7 @@ class RegisterPage extends StatelessWidget {
   TextEditingController _emailController= new TextEditingController();
   TextEditingController _pwController= new TextEditingController();
   TextEditingController _cpwController= new TextEditingController();
+  TextEditingController _nameController= new TextEditingController();
   Function()? onTap;
 
   RegisterPage({required this.onTap, super.key});
@@ -22,7 +23,8 @@ class RegisterPage extends StatelessWidget {
         ));
       }else{
         try {
-          AuthService()..signUpEmail(_emailController.text, _pwController.text);
+          AuthService()..signUpEmail(_emailController.text, _pwController.text, _nameController.text);
+
         } catch (e) {
           showDialog(context: context, builder: (context)=>AlertDialog(
             content: Text(e.runtimeType.toString(),textAlign: TextAlign.center,),
@@ -45,7 +47,13 @@ class RegisterPage extends StatelessWidget {
             ),
           ),
           SizedBox(height:25),
-
+          // name text field 
+          CompTextfield(
+            controller: _nameController, 
+            hintText: "Name",
+            pass: false,
+          ),
+          SizedBox(height: 10,),
           // email text field
           CompTextfield(
             controller: _emailController, 

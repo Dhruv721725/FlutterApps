@@ -5,11 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget{
-  final String receiverEmail;
+  final String receiverName;
   final String receiverID;
   const ChatPage({
     super.key, 
-    required this.receiverEmail,
+    required this.receiverName,
     required this.receiverID,
   });
 
@@ -75,7 +75,7 @@ class _ChatPageState extends State <ChatPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverEmail.split("@")[0]),
+        title: Text(widget.receiverName),
       ),
       body: Column(
         children: [

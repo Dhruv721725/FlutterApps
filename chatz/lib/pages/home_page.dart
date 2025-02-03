@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text("Chatz"),
       ),
       drawer: CompDrawer(),
@@ -42,6 +41,8 @@ class _HomePageState extends State<HomePage>{
         // loading
         if (snapshot.connectionState==ConnectionState.waiting) {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircularProgressIndicator.adaptive(),
               Text("Loading...")
@@ -66,11 +67,11 @@ class _HomePageState extends State<HomePage>{
         Navigator.push(context, MaterialPageRoute(
           builder:(context) => ChatPage(
             receiverID: userData["uid"],
-            receiverEmail: userData["email"]),
+            receiverName: userData["name"]),
           )
         );
       },
-      text: userData["email"],
+      text: userData["name"],
       );
     }else{
       return Container();
