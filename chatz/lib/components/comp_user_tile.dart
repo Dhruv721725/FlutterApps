@@ -16,7 +16,7 @@ class CompUserTile extends StatelessWidget{
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(16),
-        margin: EdgeInsets.fromLTRB(25, 8, 25, 0),
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(10),

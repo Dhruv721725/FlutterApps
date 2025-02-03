@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        // backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text("Chatz"),
       ),
       drawer: CompDrawer(),
@@ -48,7 +48,6 @@ class _HomePageState extends State<HomePage>{
             ],
           );
         }
-        print(snapshot.data!.toString());
         // list view 
         return ListView(
           children:snapshot.data!
@@ -74,7 +73,7 @@ class _HomePageState extends State<HomePage>{
       text: userData["email"],
       );
     }else{
-      return SizedBox();
+      return Container();
     }
   }
 }

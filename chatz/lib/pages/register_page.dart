@@ -31,7 +31,6 @@ class RegisterPage extends StatelessWidget {
       }
     }
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onSurface,
       body: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

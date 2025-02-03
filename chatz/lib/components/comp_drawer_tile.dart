@@ -15,8 +15,6 @@ class CompDrawerTile extends StatelessWidget{
     return GestureDetector(
       onTap: onTap,
       child: ListTile(
-        iconColor:Theme.of(context).colorScheme.primary,
-        textColor: Theme.of(context).colorScheme.primary,
         leading: icon,
         title: Text(text),
       ),
