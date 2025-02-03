@@ -25,15 +25,51 @@ class _ChatPageState extends State <ChatPage>{
   final ChatService _chatService=ChatService();
   final AuthService _authService=AuthService();
 
+  // for textField focus
+  FocusNode myFocusNode=FocusNode();
+
+  @override 
+  void initState(){
+    super.initState();
+
+    myFocusNode.addListener((){
+      if (myFocusNode.hasFocus) {
+        // cause a delay so that key board has a time to show up
+        // then the amount of the remaining space will e calculated
+        // then scroll down
+        Future.delayed(Duration(milliseconds: 500),
+          ()=>scrollDown());
+      }
+    });
+    // wait for a list view to be built
+    Future.delayed(Duration(milliseconds: 500),()=>scrollDown());
+  } 
+  @override
+  void dispose(){
+    myFocusNode.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+  // scroll controller
+  final ScrollController _scrollController=ScrollController();
+  void scrollDown(){
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent, 
+      duration: Duration(seconds: 1), 
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   void sendMessage() async{
     if (_messageController.text.trim().isNotEmpty) {
       // send message
       _chatService.sendMessage(
         widget.receiverID, 
-        _messageController.text
+        _messageController.text.trim(),
       );
       _messageController.clear();
     }
+    Future.delayed(Duration(milliseconds: 250),()=>scrollDown());
   }
   @override
   Widget build(BuildContext context) {
@@ -70,6 +106,7 @@ class _ChatPageState extends State <ChatPage>{
           );
         }
         return ListView(
+          controller: _scrollController,
           children:snapshot.data!.docs.map((doc)=>_buildMessageItem(doc)).toList(),
         );
       }
@@ -86,7 +123,12 @@ class _ChatPageState extends State <ChatPage>{
     DateTime date=data["timeStamp"].toDate();
 
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        // margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        margin: EdgeInsets.fromLTRB(
+          sender_message?55:10,
+          5,
+          sender_message?10:55,
+          5),
         alignment: alignment,
         child: Container(
           padding: EdgeInsets.all(8),
@@ -99,7 +141,10 @@ class _ChatPageState extends State <ChatPage>{
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(data["message"]),
+              Flexible(
+                fit: FlexFit.loose,
+                child: Text(data["message"])
+                ),
               SizedBox(width: 10,),
               Text(
                 "${date.hour}:${date.minute}",
@@ -121,7 +166,8 @@ class _ChatPageState extends State <ChatPage>{
           Expanded(child: CompTextfield(
             controller: _messageController, 
             pass: false, 
-            hintText: "Type message here..."
+            hintText: "Type message here...",
+            focusNode: myFocusNode,
             )
           ),
           IconButton(
