@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1041918340659",
+    "project_id": "wall-74",
+    "storage_bucket": "wall-74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041918340659:android:b0466fa8d498a0c8c37d46",
+        "android_client_info": {
+          "package_name": "com.example.wall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQDlWKmEcrMElCaQP-FUPfR7d1jV24_oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
