@@ -15,11 +15,11 @@ class LoginPage extends StatelessWidget{
 
     void warning(String text){
       showDialog(context: context, builder: (context)=>AlertDialog(
-        content: Center(child: Text(text)),
+        content: Text(text, textAlign: TextAlign.center,),
       ));
     }
 
-    AuthService _auth=AuthService();
+    final AuthService _auth=new AuthService();
     void logIn()async{
       try {
         await _auth.signIn(_email.text.trim(), _pass.text);

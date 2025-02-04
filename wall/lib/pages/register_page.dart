@@ -12,17 +12,15 @@ class RegisterPage extends StatelessWidget{
   TextEditingController _pass=TextEditingController();
   TextEditingController _confirmPass=TextEditingController();
 
-  AuthService _auth=AuthService();
-
   @override
   Widget build(BuildContext context) {
     
     void warning(String text){
       showDialog(context: context, builder: (context)=>AlertDialog(
-        content: Center(child: Text(text)),
+        content: Text(text, textAlign: TextAlign.center,)
       ));
     }
-
+    final AuthService _auth=new AuthService();
     void signUp()async{
       if (_pass.text==_confirmPass.text){
         try {
@@ -54,7 +52,7 @@ class RegisterPage extends StatelessWidget{
           CompTextfield(controller: _confirmPass, hintText: "Confirm Password", obscureText: true),
           SizedBox(height: 20,),
       
-          CompButton(onTap: signUp, text: "Log In"),
+          CompButton(onTap: signUp, text: "Register"),
           SizedBox(height: 20,),
       
           Row(
