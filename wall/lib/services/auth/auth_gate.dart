@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall/pages/home_page.dart';
-import 'package:wall/pages/logorreg.dart';
+import 'package:wall/pages/auth/logorreg.dart';
 
 class AuthGate extends StatelessWidget{
   @override
@@ -10,7 +10,6 @@ class AuthGate extends StatelessWidget{
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(), 
         builder: (context, snapshot){
-          print("triggered");
           if (snapshot.hasData) {
             return HomePage();
           }else{

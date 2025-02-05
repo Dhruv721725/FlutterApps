@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wall/components/comp_drawer.dart';
 
 class HomePage extends StatelessWidget {
   FirebaseAuth _auth=FirebaseAuth.instance;
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
           IconButton(onPressed: _auth.signOut, icon: Icon(Icons.logout))
         ],
       ),
+      drawer:CompDrawer(),
     );
   }
 }

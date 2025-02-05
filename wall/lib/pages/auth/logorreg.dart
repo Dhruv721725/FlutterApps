@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wall/pages/login_page.dart';
-import 'package:wall/pages/register_page.dart';
+import 'package:wall/pages/auth/login_page.dart';
+import 'package:wall/pages/auth/register_page.dart';
 
 class Logorreg extends StatefulWidget{
   @override
