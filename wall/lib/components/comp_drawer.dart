@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:wall/components/comp_tile.dart';
-import 'package:wall/pages/auth/login_page.dart';
 import 'package:wall/pages/auth/logorreg.dart';
-import 'package:wall/pages/home_page.dart';
-import 'package:wall/pages/profile_page.dart';
-import 'package:wall/pages/users_page.dart';
 import 'package:wall/services/auth/auth_service.dart';
 
 class CompDrawer extends StatelessWidget{
@@ -42,7 +36,11 @@ class CompDrawer extends StatelessWidget{
                 ],
               ),
             ),
-            CompTile(icon: Icon(Icons.logout,color: color,), text: "Logout", onTap: ()=>_auth.signOut()),
+            CompTile(icon: Icon(Icons.logout,color: color,), text: "Logout", onTap:(){
+              _auth.signOut();
+              Navigator.pop(context);
+              }
+            ),
           ],
         ),
       ),

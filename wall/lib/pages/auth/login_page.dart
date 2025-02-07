@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wall/components/comp_button.dart';
+import 'package:wall/components/comp_functions.dart';
 import 'package:wall/components/comp_textfield.dart';
 import 'package:wall/services/auth/auth_service.dart';
 
@@ -13,18 +14,14 @@ class LoginPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    void warning(String text){
-      showDialog(context: context, builder: (context)=>AlertDialog(
-        content: Text(text, textAlign: TextAlign.center,),
-      ));
-    }
+    
 
     final AuthService _auth=new AuthService();
     void logIn()async{
       try {
         await _auth.signIn(_email.text.trim(), _pass.text);
       } on Exception catch (e) {
-        warning(e.toString().split(":")[1].split("-").map((x)=>x.trim()[0].toUpperCase()+x.trim().substring(1).toLowerCase()).join(" "));
+        warning(e.toString().split(":")[1].split("-").map((x)=>x.trim()[0].toUpperCase()+x.trim().substring(1).toLowerCase()).join(" "),context);
       }
     }
 

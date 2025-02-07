@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall/components/comp_button.dart';
+import 'package:wall/components/comp_functions.dart';
 import 'package:wall/components/comp_textfield.dart';
 import 'package:wall/services/auth/auth_service.dart';
 
@@ -13,24 +16,45 @@ class RegisterPage extends StatelessWidget{
   TextEditingController _pass=TextEditingController();
   TextEditingController _confirmPass=TextEditingController();
 
+  Future<void> createUserDocument(userCredential)async{
+    if (userCredential!=null && userCredential.user!= null){
+      await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(userCredential.user!.email)
+        .set({
+          "email":userCredential.user!.email,
+          "userName":_user.text,
+        });
+    } {
+      
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-    void warning(String text){
-      showDialog(context: context, builder: (context)=>AlertDialog(
-        content: Text(text, textAlign: TextAlign.center,)
-      ));
-    }
     final AuthService _auth=new AuthService();
     void signUp()async{
+      showDialog(
+        context: context,
+        builder: (context)=>Center(
+          child: CircularProgressIndicator(),
+        ) 
+      );
       if (_pass.text==_confirmPass.text){
         try {
-          await _auth.signUp(_email.text.trim(), _pass.text.trim());
+          UserCredential userCredential= await _auth.signUp(_email.text.trim(), _pass.text.trim());
+          Navigator.pop(context);
+
+          createUserDocument(userCredential);
+
         } on Exception catch (e) {
-          warning(e.toString().split(":")[1].split("-").map((x)=>x.trim()[0].toUpperCase()+x.trim().substring(1).toLowerCase()).join(" "));
-        }
+          Navigator.pop(context);
+          warning(e.toString().split(":")[1].split("-").map((x)=>x.trim()[0].toUpperCase()+x.trim().substring(1).toLowerCase()).join(" "),context);
+        } 
+
       }else{
-        warning("Password miss-match");
+        Navigator.pop(context);
+        warning("Password miss-match", context);
       }
     }
     return Scaffold(
