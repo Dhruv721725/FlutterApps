@@ -31,10 +31,10 @@ class LoginPage extends StatelessWidget{
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(Icons.deblur, size: 150,),
-          Text("W A L L",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+          Text("W A L L",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.inversePrimary),),
           SizedBox(height: 40,),
       
-          Text("Welcome back, you have been missed."),
+          Text("Welcome back, you have been missed.", style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
           SizedBox(height: 20,),
       
           CompTextfield(controller: _email, hintText: "Email", obscureText: false),
@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget{
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Not a member?"),
+              Text("Not a member?",style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
               GestureDetector(
                 onTap: onTap,
                 child: Text("Register now", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),

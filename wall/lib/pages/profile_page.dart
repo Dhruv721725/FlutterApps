@@ -72,9 +72,15 @@ class ProfilePage extends StatelessWidget{
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.inversePrimary
                     ),
                   ),
-                  Text(userData["email"]),
+                  Text(
+                    userData["email"],
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary
+                    )
+                  ),
                 ],
               ),
             );

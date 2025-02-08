@@ -20,7 +20,7 @@ class CompDrawer extends StatelessWidget{
                 children: [
                   Icon(Icons.deblur, size: 80, color: color),
                   SizedBox(height: 10,),
-                  Text("W A L L", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                  Text("W A L L", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.inversePrimary),)
                 ],
               ),
             ),    
@@ -39,6 +39,7 @@ class CompDrawer extends StatelessWidget{
             CompTile(icon: Icon(Icons.logout,color: color,), text: "Logout", onTap:(){
               _auth.signOut();
               Navigator.pop(context);
+              // Navigator.pop(context);
               }
             ),
           ],

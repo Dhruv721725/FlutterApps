@@ -31,6 +31,9 @@ class CompTextfield extends StatelessWidget{
             borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary),
           ), 
         ),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.inversePrimary
+        ),
       ),
     );  
   }

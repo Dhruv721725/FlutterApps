@@ -5,6 +5,7 @@ import 'package:wall/pages/home_page.dart';
 import 'package:wall/pages/profile_page.dart';
 import 'package:wall/pages/users_page.dart';
 import 'package:wall/services/auth/auth_gate.dart';
+import 'package:wall/theme/dark_mode.dart';
 import 'package:wall/theme/light_mode.dart';
 
 void main() async{
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '🧱 Wall',
       theme: lightMode,
+      darkTheme: darkMode,
       home: AuthGate(),
       routes: {
         '/home':(context)=>HomePage(),
