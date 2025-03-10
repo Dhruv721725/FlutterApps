@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:melflow/models/playlist_provider.dart';
 import 'package:melflow/pages/home_page.dart';
-import 'package:melflow/theme/dark_mode.dart';
-import 'package:melflow/theme/light_mode.dart';
+import 'package:melflow/pages/settings_page.dart';
+import 'package:melflow/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context)=>ThemeProvider()),
+        ChangeNotifierProvider(create: (context)=>PlaylistProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,10 +25,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Melflow',
-      theme: lightMode,
-      darkTheme: darkMode,
+      title: '🎧MelFlow',
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: HomePage(),
+      routes: {
+        '/home':(context)=>HomePage(),
+        '/settings':(context)=>SettingsPage(),
+      },
     );
   }
 }
