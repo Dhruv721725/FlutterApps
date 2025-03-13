@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:melflow/models/song.dart';
@@ -38,6 +40,7 @@ class PlaylistProvider extends ChangeNotifier {
   ];
 
   int? _currentSongIndex;
+  bool _repeat = false;
 
   /*
   A U D I O P L A Y E R
@@ -138,12 +141,32 @@ class PlaylistProvider extends ChangeNotifier {
 
     // listen for song completion
     _audioPlayer.onPlayerComplete.listen((event){
-      playNextSong();
+      if(_repeat){
+        try {
+          _currentDuration=Duration.zero;
+          playSong();
+          notifyListeners();
+        } on Exception catch (e) {
+          print(e);
+        }
+      }else{
+        playNextSong();
+      }
     });
   }
 
-  // dispose audio player
+  // shuffling the queue
+  void shufflePlaylist(){
+    _playlist.shuffle(Random());
+  }
+  
+  // repeat one
+  void toggleRepeat(){
+    _repeat=!_repeat;
+  }
 
+  // dispose audio player
+  
   /* 
   G E T T E R S
   */
@@ -153,6 +176,7 @@ class PlaylistProvider extends ChangeNotifier {
   bool get isPlaying=>_isPlaying;
   Duration get currentDuration=>_currentDuration;
   Duration get totalDuration=>_totalDuration;
+  bool get repeat=>_repeat;
 
   /*
   S E T T E R S

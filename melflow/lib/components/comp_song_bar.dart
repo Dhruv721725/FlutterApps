@@ -91,7 +91,7 @@ class _CompSongBarState extends State<CompSongBar> {
                           icon: Icon(Icons.skip_next)
                         ),
                       ],
-                    ),              
+                    ),
                   ],
                 ),
               ),

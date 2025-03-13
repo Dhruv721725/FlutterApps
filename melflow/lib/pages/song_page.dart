@@ -107,13 +107,17 @@ class _SongPageState extends State<SongPage> {
                           Text("${(csec - csec % 60)/60}:${csec%60}",style: textColor),
                           // shuffle
                           IconButton(
-                            onPressed: (){}, 
+                            onPressed: (){
+                              value.shufflePlaylist();
+                            }, 
                             icon: Icon(Icons.shuffle)
                           ),
                           // repeat
                           IconButton(
-                            onPressed: (){}, 
-                            icon: Icon(Icons.repeat)
+                            onPressed: (){
+                              value.toggleRepeat();
+                            }, 
+                            icon: Icon(value.repeat ? Icons.repeat_one : Icons.repeat)
                           ),
                           // end
                           Text("${(tsec - tsec % 60)/60}:${tsec%60}",style: textColor)
