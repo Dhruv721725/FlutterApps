@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "21179370087",
+    "project_id": "jimmy-74",
+    "storage_bucket": "jimmy-74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21179370087:android:d5f7138bcfe76f1d7022c2",
+        "android_client_info": {
+          "package_name": "com.example.chatbot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDUBi2xSaw8WzHBlb-f4X_g_ISrRd0Nfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
