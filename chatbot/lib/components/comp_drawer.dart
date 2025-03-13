@@ -21,6 +21,7 @@ class CompDrawer extends StatelessWidget{
                 Text("Jimmy",  style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary
                 ),)
               ],
             )
