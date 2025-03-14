@@ -1,5 +1,8 @@
+import 'package:chatbot/auth/auth_gate.dart';
+import 'package:chatbot/auth/log_or_reg.dart';
 import 'package:chatbot/firebase_options.dart';
 import 'package:chatbot/pages/home_page.dart';
+import 'package:chatbot/pages/login_page.dart';
 import 'package:chatbot/theme/lightmode.dart';
 import 'package:chatbot/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Jimmy',
       theme: Provider.of<ThemeProvider>(context).theme,
-      home: HomePage(),
+      home: AuthGate(),
     );
   }
 }

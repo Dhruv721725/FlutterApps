@@ -8,7 +8,7 @@ ThemeData darkMode = ThemeData(
     primary: Colors.grey.shade700,
     secondary: Colors.grey.shade900,
     tertiary: Colors.black,
-    inversePrimary: Colors.grey.shade100
+    inversePrimary: Colors.grey.shade100,
   ),
   textTheme: GoogleFonts.nunitoTextTheme(),
 );

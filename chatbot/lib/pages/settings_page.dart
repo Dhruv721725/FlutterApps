@@ -1,3 +1,4 @@
+import 'package:chatbot/auth/auth_services.dart';
 import 'package:chatbot/components/comp_drawer.dart';
 import 'package:chatbot/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Provider.of<ThemeProvider>(context,listen: false).toggleTheme();                
               }
             ),
-          )
+          ),
         ],
       )
     );
