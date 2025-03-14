@@ -1,6 +1,7 @@
 import 'package:chatbot/auth/auth_services.dart';
 import 'package:chatbot/components/comp_button.dart';
 import 'package:chatbot/components/comp_textfield.dart';
+import 'package:chatbot/firestore/fire_store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool obscurePass=true;
   bool obscureConfirmPass=true;
   AuthServices _auth = AuthServices();
-
+  FireStore _fireStore = FireStore();
   void register()async{
     String emailtext=email.text;
     String nametext=name.text;
@@ -38,6 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }else if (emailtext!="" && nametext!="" && pass!="") {
       try {
         await _auth.register(email.text, password.text);
+        _fireStore.adduser(nametext, emailtext, pass);
       } catch (e) {
         warning(e.toString());
       }
@@ -117,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   });
                 }, 
                 icon: Icon(
-                  obscurePass?Icons.visibility : Icons.visibility_off ,
+                  obscureConfirmPass?Icons.visibility : Icons.visibility_off ,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 )
               ),

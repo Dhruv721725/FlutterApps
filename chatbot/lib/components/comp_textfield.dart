@@ -22,6 +22,7 @@ class CompTextfield extends StatelessWidget{
       child: TextField(
         controller: controller,
         obscureText: obscureText ?? false,
+        cursorColor: Theme.of(context).colorScheme.inversePrimary,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(16),
           hintText: hintText,
@@ -45,7 +46,7 @@ class CompTextfield extends StatelessWidget{
 
           suffixIcon: suffixIcon,
         ),
-        
+        style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
       ),
     );
   }

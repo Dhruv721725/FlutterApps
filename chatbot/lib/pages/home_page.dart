@@ -1,4 +1,7 @@
 import 'package:chatbot/components/comp_drawer.dart';
+import 'package:chatbot/components/comp_funcs.dart';
+import 'package:chatbot/components/comp_textfield.dart';
+import 'package:chatbot/firestore/fire_store.dart';
 import 'package:chatbot/services/gemini_service.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +11,34 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> {
-  GeminiService _geminiService=GeminiService();
-  TextEditingController _promptController = TextEditingController();
+
+  TextEditingController _prompt = TextEditingController();
+  GeminiService _gemini = GeminiService();
+  FireStore _firestore  = FireStore();
   String _response="";
+
+  void respond()async{
+    String text = _prompt.text.trim();
+    if (text!="") {
+      
+      setState(() {
+        _response = "Thinking...";
+      });
+
+      _firestore.addMessage(text, "prompt");
+      
+      String response = await _gemini.getGeminiResponse(text);
+      
+      _firestore.addMessage(response, "response");
+
+      setState(() {
+        _response = response;
+      });
+
+    }else{
+      CompFuncs().warning("Empty prompt", context);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,32 +56,14 @@ class _HomePageState extends State<HomePage> {
               child:Text(_response)
             ),
 
-            Container(
-              padding: EdgeInsets.all(16),
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: TextField(
-                controller: _promptController,
-                decoration: InputDecoration(
-                  hintText: "Prompt here...",
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary)
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary)
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: ()async{
-                      var response = await _geminiService.getGeminiResponse(_promptController.text);
-                      setState((){
-                        _response=response;
-                      });
-                    }, 
-                    icon: Icon(Icons.send)
-                  )
-                ),
-              ),
+            CompTextfield(
+              controller: _prompt, 
+              hintText: "prompt here...",
+
+              suffixIcon:IconButton(
+                onPressed: respond, 
+                icon: Icon(Icons.send)
+              ) ,
             )
           ],
         ),
