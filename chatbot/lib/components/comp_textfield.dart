@@ -23,6 +23,8 @@ class CompTextfield extends StatelessWidget{
         controller: controller,
         obscureText: obscureText ?? false,
         cursorColor: Theme.of(context).colorScheme.inversePrimary,
+        minLines: 1,
+        maxLines: obscureText==true ? 1 : 4,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(16),
           hintText: hintText,

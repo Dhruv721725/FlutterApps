@@ -9,29 +9,28 @@ class FireStore {
         try {
           await _firestore.collection("users")
             .doc(_auth.currentUser!.uid)
-            .collection("user_details")
-            .add({
+            .set({
                 "name":name,
                 "email":email,
                 "pass":pass,
-                "darkTheme":false
+                "darkTheme":false,
+                "queries":[],
             });
         } catch (e) {
           print(e);
         }
     }
 
-    Future<void> addMessage(String text, String type)async{
+    Future<String> getName()async{
         try {
-          await _firestore.collection("users")
+          var query = await _firestore.collection("users")
             .doc(_auth.currentUser!.uid)
-            .collection("chat_room")
-            .add({
-                "type":type,
-                "text":text,
-            });
+            .get();
+          String name= query.data()!["name"];
+          return name;
         } catch (e) {
-          print(e);
+          return "_";
         }
     }
+    
 }

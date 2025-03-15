@@ -1,5 +1,7 @@
 import 'package:chatbot/components/comp_drawer.dart';
 import 'package:chatbot/components/comp_funcs.dart';
+import 'package:chatbot/components/comp_prompt_tile.dart';
+import 'package:chatbot/components/comp_response_tile.dart';
 import 'package:chatbot/components/comp_textfield.dart';
 import 'package:chatbot/firestore/fire_store.dart';
 import 'package:chatbot/services/gemini_service.dart';
@@ -12,38 +14,38 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage> {
 
-  TextEditingController _prompt = TextEditingController();
+  TextEditingController _promptText = TextEditingController();
   GeminiService _gemini = GeminiService();
   FireStore _firestore  = FireStore();
-  String _response="";
+  Widget _response=SizedBox();
+  Widget _prompt=SizedBox();
 
   void respond()async{
-    String text = _prompt.text.trim();
+    String text = _promptText.text.trim();
     if (text!="") {
-      
       setState(() {
-        _response = "Thinking...";
+        _prompt = CompPromptTile(text: text);
+        _response = CompResponseTile(text:'Thinking...');
       });
-
-      _firestore.addMessage(text, "prompt");
       
-      String response = await _gemini.getGeminiResponse(text);
+      _promptText.clear();
+      String response = await _gemini.getGeminiResponse(text+" please result in brief");
       
-      _firestore.addMessage(response, "response");
-
       setState(() {
-        _response = response;
+        _response = CompResponseTile(text:response);
       });
 
     }else{
       CompFuncs().warning("Empty prompt", context);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text("Jimmy"),
         ),
       
@@ -51,13 +53,17 @@ class _HomePageState extends State<HomePage> {
         
         body: Column(
           children: [
-            
             Expanded( 
-              child:Text(_response)
+              child:ListView(
+                children: [
+                  _prompt,
+                  _response,
+                ],
+              )
             ),
 
             CompTextfield(
-              controller: _prompt, 
+              controller: _promptText, 
               hintText: "prompt here...",
 
               suffixIcon:IconButton(

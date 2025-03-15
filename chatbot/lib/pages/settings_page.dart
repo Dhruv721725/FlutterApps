@@ -16,9 +16,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text("Settings"),
       ),
-      drawer: CompDrawer(),
+      // drawer: CompDrawer(),
       body: ListView(
         children: [
           ListTile(
