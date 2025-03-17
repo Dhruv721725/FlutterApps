@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class GeminiService {
   Future<String> getGeminiResponse(String prompt) async {
     final response = await http.post(
-      Uri.parse("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCUc50ANqvVx0m-cd2Lew40CdS3jC5SD_8"),
+      Uri.parse("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=your_api_key"),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         "contents": [
