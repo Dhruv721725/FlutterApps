@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sem_miniproject/services/firestore.dart';
 
 class TravelPage extends StatelessWidget{
   String from;
@@ -7,6 +8,9 @@ class TravelPage extends StatelessWidget{
   String startDay;
   String lastDay;
   String budget;
+  String people;
+
+  bool showSave;
 
   String response;
 
@@ -16,9 +20,12 @@ class TravelPage extends StatelessWidget{
     required this.to,
     required this.startDay,
     required this.lastDay,
-    required this.budget,
     required this.response,
+    required this.showSave,
+    required this.budget,
+    required this.people,
   });
+
   @override
   Widget build(BuildContext context) {
     List<String> resList = response.split("\n\n");
@@ -41,11 +48,13 @@ class TravelPage extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 20,),
-            // destination
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // back button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black54
@@ -53,9 +62,35 @@ class TravelPage extends StatelessWidget{
                     onPressed: ()=>Navigator.pop(context), 
                     child: Icon(Icons.arrow_back,color: Colors.white,)
                   ),
+                  
+                  // save button
+                  showSave? ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green
+                    ),
+                    onPressed: (){
+                      FirestoreService _firestore = FirestoreService();
+                      _firestore.addTravelPlan(from, to, startDay, lastDay, budget, people, response);
+                    }, 
+                    child: Text("Save", style: TextStyle(color:Colors.white),),
+                  ): 
+                  // delete button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red
+                    ),
+                    onPressed: (){
+                      FirestoreService _firestore = FirestoreService();
+                      _firestore.deleteTravelPlan(from, to, startDay, lastDay, budget, people, response);
+                      Navigator.pop(context);
+                    }, 
+                    child: Text("Delete", style: TextStyle(color:Colors.white),),
+                  ),
                 ],
               ),
             ),
+
+            // destination
             Text(
               "${from} to ${to}",
               style: TextStyle(
@@ -68,15 +103,6 @@ class TravelPage extends StatelessWidget{
             // timing
             Text(
               "From ${startDay} to ${lastDay}",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            SizedBox(height: 10,),
-        
-            // budget
-            Text(
-              "Budget: ${budget}",
               style: TextStyle(
                 fontSize: 18,
               ),
@@ -107,7 +133,6 @@ class TravelPage extends StatelessWidget{
                       }
                       i+=2;
                       texts.add(Text(bt.trim()+" ",style: TextStyle(fontWeight: FontWeight.bold),));
-
                     }else{
                       ot+=tt[i];
                     }

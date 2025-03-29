@@ -11,6 +11,8 @@ class GeneratePlanButton extends StatefulWidget {
   TextEditingController budget;
   List<String> activities;
   Set<int> selectedIndices;
+  TextEditingController people;
+  TextEditingController specs;
 
   GeneratePlanButton({
     super.key,
@@ -21,6 +23,8 @@ class GeneratePlanButton extends StatefulWidget {
     required this.budget,
     required this.activities,
     required this.selectedIndices,
+    required this.people,
+    required this.specs,
   });
 
   @override
@@ -44,14 +48,18 @@ class _GeneratePlanButtonState extends State<GeneratePlanButton> {
         }
 
         String prompt = """
-          Generate a travel plan for ${widget.from.text} to 
-          ${widget.to.text}, under 
-          ${widget.budget.text} indian rupees from
+          Generate a travel plan for 
+          ${widget.people.text} from location
+          ${widget.from.text} to destination
+          ${widget.to.text}, under the budget of
+          ${widget.budget.text} indian rupees from 
           ${widget.start.text} to 
           ${widget.last.text} with activities including
-          ${interests} in brief.
+          ${interests} ,
+          ${widget.specs.text} 
+          in brief.
           """;
-        print(prompt);
+          
         setState(() {
           String data = "No data available";
           child = FutureBuilder(
@@ -69,8 +77,10 @@ class _GeneratePlanButtonState extends State<GeneratePlanButton> {
                         to: widget.to.text, 
                         startDay: widget.start.text, 
                         lastDay: widget.last.text, 
-                        budget: widget.budget.text, 
-                        response: data
+                        budget: widget.budget.text,
+                        showSave: true,
+                        response: data,
+                        people: widget.people.text,
                       )
                     )
                   );
@@ -80,7 +90,6 @@ class _GeneratePlanButtonState extends State<GeneratePlanButton> {
             }
           );
         });
-        
       }, 
 
       child: Padding(

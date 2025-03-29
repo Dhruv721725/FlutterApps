@@ -16,6 +16,8 @@ class _CreationPageState extends State<CreationPage> {
   TextEditingController start=TextEditingController();
   TextEditingController end=TextEditingController();
   TextEditingController amount=TextEditingController();
+  TextEditingController people=TextEditingController();
+  TextEditingController specs=TextEditingController();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
@@ -25,15 +27,21 @@ class _CreationPageState extends State<CreationPage> {
     "Shopping","Nature","Skyscrappers","Cuisines", "Adventure", "Culture", "Entertainment", "Relax", "Unwind"
   ];
   Set<int> _selectedIndices={};
-  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    amount.value = TextEditingValue(text:"3000");
+    people.value = TextEditingValue(text: "1");
+  }
+
   @override
   Widget build(BuildContext context) {
     start.value=TextEditingValue(text: "${DateFormat('MMMM dd, yyyy').format(startDate)}");
     end.value=TextEditingValue(text: "${DateFormat('MMMM dd, yyyy').format(endDate)}");
-    amount.value= TextEditingValue(text:"3000");
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: ListView(
           children: [
             Padding(
@@ -45,20 +53,14 @@ class _CreationPageState extends State<CreationPage> {
                   SizedBox(height: 10,),
                   // heading
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.arrow_back)),
+                      
                       Text("Travo Genie", style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),),
-                      IconButton(
-                        onPressed: (){
-                          setState(() {
-                            dark_mode= !dark_mode;  
-                          });  
-                        },
-                        icon: Icon(!dark_mode? Icons.dark_mode : Icons.light_mode),
-                      ),
                     ],
                   ),
                           
@@ -71,6 +73,19 @@ class _CreationPageState extends State<CreationPage> {
                     textAlign: TextAlign.start,
                   ), 
                   SizedBox(height: 20,),
+                  
+                  // Total no. of people
+                          
+                  SizedBox(height: 20,),
+
+                  Text("Enter the total no. of people.", textAlign: TextAlign.start,),
+                  CompTextfield(
+                    controller: people,
+                    hintText: "People...",
+                  ),
+                          
+                  SizedBox(height: 20,),
+
                   // location text
                   Text("Enter your current location.", textAlign: TextAlign.start,),
                   CompTextfield(
@@ -79,7 +94,7 @@ class _CreationPageState extends State<CreationPage> {
                   ),
                           
                   SizedBox(height: 20,),
-                          
+
                   // destination text
                   Text("Enter your destination.", textAlign: TextAlign.start,),
                   CompTextfield(
@@ -215,8 +230,17 @@ class _CreationPageState extends State<CreationPage> {
                       }
                     )
                   ),
-
+                  
+                //  other perks      
                   SizedBox(height: 20,),
+
+                  Text("Other Specifications.", textAlign: TextAlign.start,),
+                  CompTextfield(
+                    controller: specs,
+                    hintText: "Constraints"
+                  ),
+
+                  SizedBox(height: 20,),                  
                   // Generate plan button
                   GeneratePlanButton(
                     from: location,
@@ -225,7 +249,9 @@ class _CreationPageState extends State<CreationPage> {
                     last: end,
                     budget: amount,
                     activities: activities,
-                    selectedIndices:_selectedIndices
+                    selectedIndices:_selectedIndices,
+                    people:people,
+                    specs:specs,
                   ),
                   SizedBox(height: 20,),
                 ],
