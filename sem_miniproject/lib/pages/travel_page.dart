@@ -44,7 +44,7 @@ class _TravelPageState extends State<TravelPage> {
             // Background animation
             Positioned.fill(
               child: Lottie.asset(
-                'animation.json', // <-- Add a beautiful background animation
+                'assets/animation.json', // <-- Add a beautiful background animation
                 fit: BoxFit.fitWidth,
                 repeat: true,
               ),
@@ -117,7 +117,7 @@ class _TravelPageState extends State<TravelPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'beach.jpg',
+                    'assets/beach.jpg',
                     height: 70,
                     width: MediaQuery.of(context).size.width * 0.9,
                     fit: BoxFit.cover,
@@ -185,7 +185,7 @@ class _TravelPageState extends State<TravelPage> {
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.8),
+                          color: Colors.black.withValues(alpha: 0.8),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         padding: EdgeInsets.all(12),

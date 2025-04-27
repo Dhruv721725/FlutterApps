@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.black.withValues(alpha: 0.3),
           elevation: 0,
           title: Row(
             children: [
@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 55,),
               // Hero Section with Slide + Fade
               Stack(
                 children: [
@@ -88,7 +89,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     //     image: AssetImage("beach.jpg"),
                     //     fit: BoxFit.cover,
                     //     colorFilter: ColorFilter.mode(
-                    //       Colors.black.withOpacity(0.3),
+                    //       Colors.black.withValues(alpha: 0.3),
                     //       BlendMode.darken,
                     //     ),
                     //   ),
@@ -103,10 +104,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         viewportFraction: 0.8, // To cover the full container width
                       ),
                       items: [
-                        'beach.jpg',  // Image 1
-                        'mountains.png', // Image 2
-                        'paris.jpg',   // Image 3
-                        'tokyo.jpg',   // Image 4
+                        'assets/beach.jpg',  // Image 1
+                        'assets/mountains.png', // Image 2
+                        'assets/paris.jpg',   // Image 3
+                        'assets/tokyo.jpg',   // Image 4
                       ].map((item) {
                         return Container(
                           decoration: BoxDecoration(
@@ -114,7 +115,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               image: AssetImage(item),
                               fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.3),
+                                Colors.black.withValues(alpha: 0.3),
                                 BlendMode.darken,
                               ),
                             ),
@@ -161,7 +162,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   MaterialPageRoute(builder: (context) => CreationPage()),
                 ),
                 borderRadius: BorderRadius.circular(15),
-                splashColor: Colors.lightBlueAccent.withOpacity(0.4),
+                splashColor: Colors.lightBlueAccent.withValues(alpha: 0.3),
                 child: Container(
                   padding: EdgeInsets.all(20),
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -247,22 +248,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       suggestedPlanCard(
                         "Maldives",
                         "Luxury Beaches",
-                        "beach.jpg",
+                        "assets/beach.jpg",
                       ),
                       suggestedPlanCard(
                         "Swiss Alps",
                         "Mountains & Snow",
-                        "mountains.png",
+                        "assets/mountains.png",
                       ),
                       suggestedPlanCard(
                         "Paris",
                         "City of Lights",
-                        "paris.jpg",
+                        "assets/paris.jpg",
                       ),
                       suggestedPlanCard(
                         "Tokyo",
                         "Tradition & Tech",
-                        "tokyo.jpg",
+                        "assets/tokyo.jpg",
                       ),
                     ],
                   ),
