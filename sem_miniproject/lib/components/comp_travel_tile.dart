@@ -36,105 +36,75 @@ class CompTravelTile extends StatelessWidget{
         ));
       },
       child: Container(
-        padding:EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         margin: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.black54,
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey.shade800, Colors.black87],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
-      
-        child:Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Destination
             Text(
-              "Destination: ",
+              "Destination:",
               style: TextStyle(
                 fontSize: 16,
+                color: Colors.white70,
               ),
             ),
-            
             Text(
               destination,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
-
-            SizedBox(height: 8,),
-            // Dates
+            SizedBox(height: 12),
             
-            Text(
-              "From ",
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-
-            Text(
-              start,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-            
-            // end date
-            Text(
-              " to ",
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            Text(
-              end,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            SizedBox(height: 8,),
-      
-            // Budget
-            Text(
-              "Budget: ",
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-
-            Text(
-              "INR "+budget,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-
-            SizedBox(height: 8,),
-      
-            // people
             Row(
               children: [
+                Icon(Icons.calendar_today, size: 18, color: Colors.white70),
+                SizedBox(width: 8),
                 Text(
-                  "For "
+                  "From: ",
+                  style: TextStyle(fontSize: 16, color: Colors.white70),
                 ),
                 Text(
-                  people,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),
-                ),Text(
-                  " number of persons."
+                  start,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(Icons.arrow_downward, size: 18, color: Colors.white70),
+                SizedBox(width: 8),
+                Text(
+                  "To: ",
+                  style: TextStyle(fontSize: 16, color: Colors.white70),
+                ),
+                Text(
+                  end,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ],
             ),
           ],
-        ) ,
+        ),
       ),
     );
   }

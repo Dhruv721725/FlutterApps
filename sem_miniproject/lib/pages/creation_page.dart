@@ -11,253 +11,246 @@ class CreationPage extends StatefulWidget {
 }
 
 class _CreationPageState extends State<CreationPage> {
-  TextEditingController destination=TextEditingController();
-  TextEditingController location=TextEditingController();
-  TextEditingController start=TextEditingController();
-  TextEditingController end=TextEditingController();
-  TextEditingController amount=TextEditingController();
-  TextEditingController people=TextEditingController();
-  TextEditingController specs=TextEditingController();
+  TextEditingController destination = TextEditingController();
+  TextEditingController location = TextEditingController();
+  TextEditingController start = TextEditingController();
+  TextEditingController end = TextEditingController();
+  TextEditingController amount = TextEditingController();
+  TextEditingController people = TextEditingController();
+  TextEditingController specs = TextEditingController();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
-  bool dark_mode=true;
+  Set<int> _selectedIndices = {};
 
   List<String> activities = [
-    "Shopping","Nature","Skyscrappers","Cuisines", "Adventure", "Culture", "Entertainment", "Relax", "Unwind"
+    "Shopping", "Nature", "Skyscrapers", "Cuisines", 
+    "Adventure", "Culture", "Entertainment", "Relax", "Unwind"
   ];
-  Set<int> _selectedIndices={};
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    amount.value = TextEditingValue(text:"3000");
-    people.value = TextEditingValue(text: "1");
+    amount.text = "3000";
+    people.text = "1";
   }
 
   @override
   Widget build(BuildContext context) {
-    start.value=TextEditingValue(text: "${DateFormat('MMMM dd, yyyy').format(startDate)}");
-    end.value=TextEditingValue(text: "${DateFormat('MMMM dd, yyyy').format(endDate)}");
+    start.text = DateFormat('MMMM dd, yyyy').format(startDate);
+    end.text = DateFormat('MMMM dd, yyyy').format(endDate);
+
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: ListView(
+          padding: EdgeInsets.all(16),
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.pop(context), 
+                  icon: Icon(Icons.arrow_back)
+                ),
+                Text(
+                  "Travo Genie",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Fill out the details to personalize your travel experience!",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 20),
+
+            _buildSection(
+              title: "People and Location",
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10,),
-                  // heading
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.arrow_back)),
-                      
-                      Text("Travo Genie", style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),),
-                    ],
-                  ),
-                          
-                  // guide text
-                  Text(
-                    "Fill out the information below in order to help us guide you better.", 
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary
-                    ),
-                    textAlign: TextAlign.start,
-                  ), 
-                  SizedBox(height: 20,),
-                  
-                  // Total no. of people
-                          
-                  SizedBox(height: 20,),
-
-                  Text("Enter the total no. of people.", textAlign: TextAlign.start,),
-                  CompTextfield(
-                    controller: people,
-                    hintText: "People...",
-                  ),
-                          
-                  SizedBox(height: 20,),
-
-                  // location text
-                  Text("Enter your current location.", textAlign: TextAlign.start,),
-                  CompTextfield(
-                    controller: location,
-                    hintText: "Current Location...",
-                  ),
-                          
-                  SizedBox(height: 20,),
-
-                  // destination text
-                  Text("Enter your destination.", textAlign: TextAlign.start,),
-                  CompTextfield(
-                    controller: destination,
-                    hintText: "Destination...",
-                  ),
-                          
-                  SizedBox(height: 20,),
-                  Text(
-                    "Enter the duration",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 16
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                          
-                  // start date
-                  Text(
-                    "Starting Date",
-                    textAlign: TextAlign.start,
-                  ),
-                          
-                  TableCalendar(
-                    focusedDay: startDate, 
-                    firstDay: DateTime(2000), 
-                    lastDay: endDate,
-                    calendarFormat: CalendarFormat.week,
-                    startingDayOfWeek: StartingDayOfWeek.monday,
-                    selectedDayPredicate: (day) => isSameDay(startDate, day),
-                    calendarStyle: CalendarStyle(
-                      
-                    ),
-                    onDaySelected: (selectedDay, focusedDay) {
-                      setState(() {
-                        startDate = selectedDay;
-                      });
-                    },
-                    headerStyle: const HeaderStyle(
-                      formatButtonVisible: false, // Hide the month format button
-                    ),
-                  ),
-                          
-                  CompTextfield(
-                    controller: start,
-                    readOnly: true,
-                    hintText: "Start Date...",
-                  ),
-                  SizedBox(height: 20,),
-                          
-                  // End date
-                  Text(
-                    "Ending Date",
-                    textAlign: TextAlign.start,
-                  ),
-                          
-                  TableCalendar(
-                    focusedDay: endDate, 
-                    firstDay: DateTime(2000), 
-                    lastDay: DateTime(2100),
-                    calendarFormat: CalendarFormat.week,
-                    startingDayOfWeek: StartingDayOfWeek.monday,
-                    selectedDayPredicate: (day) => isSameDay(endDate, day),
-                          
-                    calendarStyle: CalendarStyle(
-                      rangeHighlightColor: Colors.green
-                    ),
-                          
-                    onDaySelected: (selectedDay, focusedDay) {
-                      setState(() {
-                        endDate = selectedDay;
-                      });
-                    },
-                    headerStyle: const HeaderStyle(
-                      formatButtonVisible: false, // Hide the month format button
-                    ),
-                  ),
-                          
-                  CompTextfield(
-                    controller: end,
-                    readOnly: true,
-                    hintText: "Start Date...",
-                  ),
-                  SizedBox(height: 20,),
-                          
-                  // budget
-                  Text("Specify your budget in(INR) for the journey."),
-                  
-                  CompTextfield(
-                    controller: amount, 
-                    hintText: "Amount..."
-                  ),
-                  SizedBox(height: 20,),
-                          
-                  // Interests / Activities
-                  Text(
-                    "Interests/Activities",
-                    style: TextStyle(
-                      fontSize: 20
-                    ),
-                  ),
-                  Text(
-                    "Please select the activities you wants to add to your travel plan.",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color:Theme.of(context).colorScheme.secondary 
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  /*
-                  C H O I C E
-                  C H I P S
-                  H E R E 
-                  */
-                  Wrap(
-                    spacing: 10.0, // Space between chips
-                    runSpacing: 10.0, // Space between lines
-                    children: List.generate(
-                      activities.length, 
-                      (index){
-                        return ChoiceChip(
-                          label: Text(activities[index]), 
-                          selected: _selectedIndices.contains(index),
-                          onSelected: (bool selected) {
-                            if (!_selectedIndices.contains(index)) {
-                              _selectedIndices.add(index);
-                            }else{
-                              _selectedIndices.remove(index);
-                            }
-                            setState(() {});
-                          },
-                        );
-                      }
-                    )
-                  ),
-                  
-                //  other perks      
-                  SizedBox(height: 20,),
-
-                  Text("Other Specifications.", textAlign: TextAlign.start,),
-                  CompTextfield(
-                    controller: specs,
-                    hintText: "Constraints"
-                  ),
-
-                  SizedBox(height: 20,),                  
-                  // Generate plan button
-                  GeneratePlanButton(
-                    from: location,
-                    to: destination,
-                    start: start,
-                    last: end,
-                    budget: amount,
-                    activities: activities,
-                    selectedIndices:_selectedIndices,
-                    people:people,
-                    specs:specs,
-                  ),
-                  SizedBox(height: 20,),
+                  _buildFieldLabel("Total No. of People"),
+                  CompTextfield(controller: people, hintText: "People..."),
+                  SizedBox(height: 10),
+                  _buildFieldLabel("Current Location"),
+                  CompTextfield(controller: location, hintText: "Current Location..."),
+                  SizedBox(height: 10),
+                  _buildFieldLabel("Destination"),
+                  CompTextfield(controller: destination, hintText: "Destination..."),
                 ],
               ),
-            )
+            ),
+
+            _buildSection(
+              title: "Travel Dates",
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildFieldLabel("Starting Date"),
+                  _buildCalendar(startDate, (selectedDay) {
+                    setState(() {
+                      startDate = selectedDay;
+                    });
+                  }),
+                  CompTextfield(controller: start, hintText: "Start Date...", readOnly: true),
+                  SizedBox(height: 10),
+                  _buildFieldLabel("Ending Date"),
+                  _buildCalendar(endDate, (selectedDay) {
+                    setState(() {
+                      endDate = selectedDay;
+                    });
+                  }),
+                  CompTextfield(controller: end, hintText: "End Date...", readOnly: true),
+                ],
+              ),
+            ),
+
+            _buildSection(
+              title: "Budget",
+              child: Column(
+                children: [
+                  _buildFieldLabel("Estimated Budget (INR)"),
+                  CompTextfield(controller: amount, hintText: "Amount..."),
+                ],
+              ),
+            ),
+
+            _buildSection(
+              title: "Activities",
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Choose what you would love to do!",
+                    style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  ),
+                  SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: List.generate(
+                      activities.length,
+                      (index) => ChoiceChip(
+                        label: Text(activities[index]),
+                        selected: _selectedIndices.contains(index),
+                        selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedIndices.add(index);
+                            } else {
+                              _selectedIndices.remove(index);
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            _buildSection(
+              title: "Other Specifications",
+              child: Column(
+                children: [
+                  _buildFieldLabel("Constraints / Special Requests"),
+                  CompTextfield(controller: specs, hintText: "Constraints"),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 20),
+            GeneratePlanButton(
+              from: location,
+              to: destination,
+              start: start,
+              last: end,
+              budget: amount,
+              activities: activities,
+              selectedIndices: _selectedIndices,
+              people: people,
+              specs: specs,
+            ),
+            SizedBox(height: 20),
           ],
+        ),
+      ),
+    );
+  }
+
+  // Custom Section builder
+  Widget _buildSection({required String title, required Widget child}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: 12),
+          child,
+        ],
+      ),
+    );
+  }
+
+  // Custom field label
+  Widget _buildFieldLabel(String text) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
+  // Calendar widget
+  Widget _buildCalendar(DateTime date, void Function(DateTime) onDaySelected) {
+    return TableCalendar(
+      focusedDay: date,
+      firstDay: DateTime(2000),
+      lastDay: DateTime(2100),
+      calendarFormat: CalendarFormat.week,
+      startingDayOfWeek: StartingDayOfWeek.monday,
+      selectedDayPredicate: (day) => isSameDay(date, day),
+      onDaySelected: (selectedDay, _) => onDaySelected(selectedDay),
+      headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
+      calendarStyle: CalendarStyle(
+        todayDecoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+          shape: BoxShape.circle,
+        ),
+        selectedDecoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          shape: BoxShape.circle,
         ),
       ),
     );

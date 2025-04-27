@@ -1,18 +1,17 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sem_miniproject/services/firestore.dart';
+import 'package:lottie/lottie.dart'; // <-- NEW: for background animation
 
-class TravelPage extends StatelessWidget{
-  String from;
-  String to;
-  String startDay;
-  String lastDay;
-  String budget;
-  String people;
-
-  bool showSave;
-
-  String response;
+class TravelPage extends StatefulWidget {
+  final String from;
+  final String to;
+  final String startDay;
+  final String lastDay;
+  final String budget;
+  final String people;
+  final bool showSave;
+  final String response;
 
   TravelPage({
     super.key,
@@ -27,140 +26,178 @@ class TravelPage extends StatelessWidget{
   });
 
   @override
+  State<TravelPage> createState() => _TravelPageState();
+}
+
+class _TravelPageState extends State<TravelPage> {
+  bool pressed = false;
+  @override
   Widget build(BuildContext context) {
-    List<String> resList = response.split("\n\n");
+    List<String> resList = widget.response.split("\n\n");
 
-    return SafeArea(child: Scaffold(
-      body: Container(
-        // background image
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/bg.jpg"),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.alphaBlend(Colors.black.withAlpha(128), Colors.transparent), 
-              BlendMode.darken,
-            )
-          ),
-        ),
-        
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
           children: [
-            SizedBox(height: 20,),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // back button
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black54
-                    ),
-                    onPressed: ()=>Navigator.pop(context), 
-                    child: Icon(Icons.arrow_back,color: Colors.white,)
-                  ),
-                  
-                  // save button
-                  showSave? ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green
-                    ),
-                    onPressed: (){
-                      FirestoreService _firestore = FirestoreService();
-                      _firestore.addTravelPlan(from, to, startDay, lastDay, budget, people, response);
-                    }, 
-                    child: Text("Save", style: TextStyle(color:Colors.white),),
-                  ): 
-                  // delete button
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red
-                    ),
-                    onPressed: (){
-                      FirestoreService _firestore = FirestoreService();
-                      _firestore.deleteTravelPlan(from, to, startDay, lastDay, budget, people, response);
-                      Navigator.pop(context);
-                    }, 
-                    child: Text("Delete", style: TextStyle(color:Colors.white),),
-                  ),
-                ],
+            // Background animation
+            Positioned.fill(
+              child: Lottie.asset(
+                'animation.json', // <-- Add a beautiful background animation
+                fit: BoxFit.fitWidth,
+                repeat: true,
               ),
             ),
 
-            // destination
-            Text(
-              "${from} to ${to}",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-            SizedBox(height: 10,),
-            
-            // timing
-            Text(
-              "From ${startDay} to ${lastDay}",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            SizedBox(height: 10,),
-        
-            // response
-            Expanded(
-              child: ListView.builder(
-                itemCount:resList.length,
-                itemBuilder: (context,index){      
-                  // bolding texts
-                  String tt = resList[index].trim();
-                  List<Widget> texts = [];
-                  
-                  int n = tt.length;
-                  int i=0;
-                  String ot="";
-                  while (i<n) {
-                    if(i+1<n && (tt[i]=="*" && tt[i+1]=="*")){
-                      texts.add(Text(ot.trim()));
-                      ot="";
-                      String bt = "";
-                      i+=2;
-                      while (i+1<n && !(tt[i]=="*" && tt[i+1]=="*")) {
-                        bt+=tt[i];
-                        i++; 
+            // Main content
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 10),
+
+                // Top buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Back button
+                      CircleAvatar(
+                        backgroundColor: Colors.black54,
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back, color: Colors.white),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ),
+
+                      // Save/Delete button
+                      widget.showSave
+                          ? ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green.shade600,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              ),
+                              
+                              onPressed: pressed? null: () {
+                                FirestoreService _firestore = FirestoreService();
+                                _firestore.addTravelPlan(
+                                    widget.from, widget.to, widget.startDay, widget.lastDay, widget.budget, widget.people, widget.response);
+                                setState(() {
+                                  pressed = true;
+                                });
+                              },
+                              icon: Icon(Icons.save, color: Colors.white),
+                              label: Text('Save', style: TextStyle(color: Colors.white)),
+                            )
+                          : ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red.shade600,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              ),
+                              onPressed:pressed? null:  () {
+                                FirestoreService _firestore = FirestoreService();
+                                _firestore.deleteTravelPlan(
+                                    widget.from, widget.to, widget.startDay, widget.lastDay, widget.budget, widget.people, widget.response);
+                                setState(() {
+                                  pressed = true;
+                                });
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.delete, color: Colors.white),
+                              label: Text('Delete', style: TextStyle(color: Colors.white)),
+                            ),
+                    ],
+                  ),
+                ),
+
+                // Big Image at top (Swiss Alps related)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    'beach.jpg',
+                    height: 70,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 20),
+
+                // Title
+                Text(
+                  "${widget.from} ➔ ${widget.to}",
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [Shadow(blurRadius: 10, color: Colors.black)],
+                  ),
+                ),
+                SizedBox(height: 8),
+
+                // Dates
+                Text(
+                  "From ${widget.startDay} to ${widget.lastDay}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white70,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                SizedBox(height: 20),
+
+                // Travel Plan Details
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: resList.length,
+                    itemBuilder: (context, index) {
+                      String tt = resList[index].trim();
+                      List<Widget> texts = [];
+
+                      int n = tt.length;
+                      int i = 0;
+                      String ot = "";
+                      while (i < n) {
+                        if (i + 1 < n && tt[i] == "*" && tt[i + 1] == "*") {
+                          texts.add(Text(ot.trim(), style: TextStyle(color: Colors.white70)));
+                          ot = "";
+                          String bt = "";
+                          i += 2;
+                          while (i + 1 < n && !(tt[i] == "*" && tt[i + 1] == "*")) {
+                            bt += tt[i];
+                            i++;
+                          }
+                          i += 2;
+                          texts.add(Text(
+                            bt.trim() + " ",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                          ));
+                        } else {
+                          ot += tt[i];
+                        }
+                        i++;
                       }
-                      i+=2;
-                      texts.add(Text(bt.trim()+" ",style: TextStyle(fontWeight: FontWeight.bold),));
-                    }else{
-                      ot+=tt[i];
-                    }
-                    i++;
-                  }
-                  texts.add(Text(ot.trim()));
-                  ot="";
+                      texts.add(Text(ot.trim(), style: TextStyle(color: Colors.white70)));
 
-                  return Container(
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: ListTile(
-                      title: Wrap(
-                        children: texts,
-                      )
-                    ),
-                  );
-                }
-              ),
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: EdgeInsets.all(12),
+                        child: ListTile(
+                          title: Wrap(children: texts),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
+              ],
             ),
-            SizedBox(height: 10,),
           ],
         ),
       ),
-    ));
+    );
   }
 }
