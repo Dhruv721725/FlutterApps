@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:sem_miniproject/services/firestore.dart';
-import 'package:lottie/lottie.dart'; // <-- NEW: for background animation
+import 'package:lottie/lottie.dart';
+import 'package:sem_miniproject/services/notification_service.dart'; // <-- NEW: for background animation
 
 class TravelPage extends StatefulWidget {
   final String from;
@@ -31,6 +32,7 @@ class TravelPage extends StatefulWidget {
 
 class _TravelPageState extends State<TravelPage> {
   bool pressed = false;
+  NotificationService notify = NotificationService();
   @override
   Widget build(BuildContext context) {
     List<String> resList = widget.response.split("\n\n");
@@ -81,6 +83,7 @@ class _TravelPageState extends State<TravelPage> {
                                 FirestoreService _firestore = FirestoreService();
                                 _firestore.addTravelPlan(
                                     widget.from, widget.to, widget.startDay, widget.lastDay, widget.budget, widget.people, widget.response);
+                                notify.showNotification("Saved", "Your travel plan from ${widget.from} to ${widget.to} has succesfully saved.");
                                 setState(() {
                                   pressed = true;
                                 });
@@ -100,6 +103,7 @@ class _TravelPageState extends State<TravelPage> {
                                 setState(() {
                                   pressed = true;
                                 });
+                                notify.showNotification("deleted", "Your travel plan from ${widget.from} to ${widget.to} has succesfully deleted.");
                                 Navigator.pop(context);
                               },
                               icon: Icon(Icons.delete, color: Colors.white),

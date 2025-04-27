@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sem_miniproject/auth/auth_gate.dart';
 import 'package:sem_miniproject/firebase_options.dart';
+import 'package:sem_miniproject/services/notification_service.dart';
 import 'package:sem_miniproject/theme/dark_mode.dart';
 
 void main() async{
@@ -10,6 +11,7 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ); 
+  NotificationService().initializeNotifications();
   runApp(const MyApp());
 }
 
