@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:sem_miniproject/pages/map_page.dart';
 import 'package:sem_miniproject/services/firestore.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sem_miniproject/services/notification_service.dart'; // <-- NEW: for background animation
@@ -114,15 +115,27 @@ class _TravelPageState extends State<TravelPage> {
                 ),
 
                 // Big Image at top (Swiss Alps related)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    'assets/beach.jpg',
-                    height: 70,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    fit: BoxFit.cover,
+                GestureDetector(
+                  onTap:() {
+                    Navigator.push(
+                      context, MaterialPageRoute(
+                        builder: (context)=>MapPage(
+                          startLocationName: "${widget.from}, India", 
+                          endLocationName: "${widget.to}, India")
+                      )
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/map.jpg',
+                      height: 70,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
+
                 SizedBox(height: 20),
 
                 // Title
