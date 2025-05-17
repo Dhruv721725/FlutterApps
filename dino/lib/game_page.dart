@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,6 +19,9 @@ class _GamePageState extends State<GamePage> {
   double obstacleX = 1; // right
   int score = 0;
   Timer? gameTimer; 
+
+  List <String> obstacles = ["🌵", "🪨", "⚔️", "🔥"]; 
+  int obsti=0;
 
   void jump(){
     time = 0;
@@ -47,10 +51,13 @@ class _GamePageState extends State<GamePage> {
       
       if (obstacleX<-1.2) {
         obstacleX = 1.0;
+        setState(() {
+          obsti = Random().nextInt(obstacles.length);
+        });
         score++ ;
       }
 
-      if (obstacleX < 0.1 && obstacleX > -0.1 && dinoY > 0.9) {
+      if (obstacleX < -0.6 && obstacleX > -0.9 && dinoY > 0.9) {
         timer.cancel();
         showGameOverDialog();
       }
@@ -82,7 +89,7 @@ class _GamePageState extends State<GamePage> {
     return GestureDetector(
       onTap: isGameStarted ? jump : startGame,
       child: Scaffold(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.brown,
         
         body: Column(
           children: [
@@ -90,28 +97,35 @@ class _GamePageState extends State<GamePage> {
             Expanded(
               flex: 3,
               
-              child: Stack(
-                children: [
-                  
-                  AnimatedContainer(
-                    alignment: Alignment(0,dinoY),
-                    duration: Duration(microseconds: 0),
-                    child: Text("🏀", style: TextStyle(fontSize: 50),), // dino icon
-                  ),
+              child: Container(
+                color: Colors.lightBlueAccent[100],
+                child: Stack(
+                  children: [    
+                    Container(
+                      alignment: Alignment(0.9, -0.9),
+                      child: Text("☀️", style: TextStyle(fontSize: 100),),
+                    ),
 
-                  AnimatedContainer(
-                    alignment: Alignment(obstacleX, 1),
-                    duration: Duration(milliseconds: 0),
-                    child: Text("🌵", style: TextStyle(fontSize: 50),), // cactus icon
-                  )
-
-                ],
+                    AnimatedContainer(
+                      alignment: Alignment(-0.8,dinoY),
+                      duration: Duration(microseconds: 0),
+                      child: Text("🏀", style: TextStyle(fontSize: 50),), // dino icon
+                    ),
+                
+                    AnimatedContainer(
+                      alignment: Alignment(obstacleX, 1),
+                      duration: Duration(milliseconds: 0),
+                      child: Text( obstacles[obsti], style: TextStyle(fontSize: 50),), // cactus icon
+                    )
+                
+                  ],
+                ),
               ),
             ),
 
             Container(
-              height: 15,
-              color: Colors.grey[700],
+              height: 20,
+              color: Colors.lightGreen,
             ),
 
             Expanded(
