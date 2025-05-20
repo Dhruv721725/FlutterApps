@@ -6,17 +6,34 @@ import 'package:flutter/widgets.dart';
 class Square extends StatelessWidget{
   final bool isWhite ;
   final ChessPiece? piece;
+  final bool isSelected;
+  final Function()? onTap;
+  final bool isValidMove; 
+
   Square({
     super.key,
     required this.isWhite,
     this.piece,
+    required this.isSelected,
+    required this.onTap,
+    required this.isValidMove,
   });
 
   @override
   Widget build(BuildContext context) {
+    Color? squareColor;
+    if (isSelected) {
+      squareColor = Colors.green;
+    }else if(isValidMove){
+      squareColor = Colors.tealAccent;
+    }
+    else{
+      squareColor = isWhite? foregroungColor : backgroundColor;
+    }
     return GestureDetector(
+      onTap: onTap,
       child: Container(
-        color: isWhite? foregroungColor : backgroundColor,
+        color: squareColor,
         child: piece!=null ? 
           Image.asset(
             piece!.imagePath,
