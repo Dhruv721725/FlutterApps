@@ -24,7 +24,14 @@ class _GameBoardState extends State<GameBoard> {
 
   // list of valid moves [[row,col]...]
   List<List<int>> validMoves = [];
-  
+  List<ChessPiece> whiteTaken = [];
+  List<ChessPiece> blackTaken = [];
+
+  // for getting players turn
+  bool isWhiteTurn = true;
+
+
+
   @override
   void initState() {
     super.initState();
@@ -68,30 +75,46 @@ class _GameBoardState extends State<GameBoard> {
     newBoard[7][3] = ChessPiece(imagePath: "pieces/king.png", isWhite: false, type: ChessPieceType.king);
     
     //test set
-    newBoard[3][3] = ChessPiece(imagePath: "pieces/knight.png", isWhite: false, type: ChessPieceType.knight);
     board = newBoard;
   }
 
   void pieceSelected(int row, int col){
     setState(() {
-      if (board[row][col] !=null ) {
+
+      if (selectedPiece==null && board[row][col] !=null ) {
+        if (board[row][col]!.isWhite==isWhiteTurn) {
+          selectedPiece = board[row][col];
+          selectedRow = row;
+          selectedCol = col; 
+        }
+      }else if(selectedPiece!=null && board[row][col]!=null && selectedPiece!.isWhite == board[row][col]!.isWhite){
         selectedPiece = board[row][col];
         selectedRow = row;
         selectedCol = col;
-      }else{
-        selectedPiece = null;
-        selectedRow = row;
-        selectedCol = col;
+      }else if(selectedPiece !=null){
+        bool valid = false;
+        for (var i in validMoves) {
+          if (row==i[0] && col==i[1]) {
+            valid=true;
+            break;
+          }
+        }
+        if (valid) {
+          isWhiteTurn=!isWhiteTurn;
+          move(row, col);
+        }else{
+          // selectedPiece = board[row][col];
+          // selectedRow = row;
+          // selectedCol = col;
+          selectedPiece = null;
+          validMoves = [];
+        }
       }
       // if a piece is selected its valid moves
       if (selectedPiece!=null) {
         validMoves = CalculateRawValidMoves(row, col, selectedPiece);
       }else{
         validMoves = [];
-      }
-
-      for (int i=0; i<validMoves.length; i++) {
-        print(validMoves[i]);
       }
     });
   }
@@ -135,48 +158,19 @@ class _GameBoardState extends State<GameBoard> {
 
       case ChessPieceType.rook:
         // vertical directions row to 7th row and row to 0th row
-        for(int i=row+1; i<8; i++){
-          if (board[i][col]!=null) {
-            if (piece.isWhite!=board[i][col]!.isWhite) {
-              candidateMoves.add([i,col]);
+        var rcords = [[0,1], [0,-1], [1,0], [-1,0]];
+        for(var cords in rcords){
+          int i=row+cords[0], j= col+cords[1];
+          while (isInBoard(i, j)) {
+            if (board[i][j]!=null) {
+              if (board[i][j]!.isWhite!=piece.isWhite) {
+                candidateMoves.add([i,j]);
+              }
+              break;
             }
-            break;
-          }else{
-            candidateMoves.add([i,col]);
-          }
-        }
-        
-        for(int i=row-1; i>=0; i--){
-          if (board[i][col]!=null) {
-            if (piece.isWhite!=board[i][col]!.isWhite) {
-              candidateMoves.add([i,col]);
-            }
-            break;
-          }else{
-            candidateMoves.add([i,col]);
-          }
-        }
-
-        // horizontal direction col to 7th col and col to 0th col
-        for(int j=col+1; j<8; j++){
-          if (board[row][j]!=null) {
-            if (piece.isWhite!=board[row][j]!.isWhite) {
-              candidateMoves.add([row,j]);
-            }
-            break;
-          }else{
-            candidateMoves.add([row,j]);
-          }
-        }
-        
-        for(int j=col-1; j>=0; j--){
-          if (board[row][j]!=null) {
-            if (piece.isWhite!=board[row][j]!.isWhite) {
-              candidateMoves.add([row,j]);
-            }
-            break;
-          }else{
-            candidateMoves.add([row,j]);
+            candidateMoves.add([i,j]);
+            i+=cords[0];
+            j+=cords[1];
           }
         }
         break;
@@ -204,6 +198,7 @@ class _GameBoardState extends State<GameBoard> {
           }
         }
         break;
+
       case ChessPieceType.bishop:
         var bcords = [
           [-1,-1],
@@ -211,11 +206,47 @@ class _GameBoardState extends State<GameBoard> {
           [1,-1],
           [1,1],
         ];
-        for(int i = row; i<)
+        for(var cords in bcords){
+          int i = row+cords[0], j = col+cords[1];
+          while(isInBoard(i, j)){
+            if (board[i][j]!=null) {
+              if (board[i][j]!.isWhite!=piece.isWhite) {
+                candidateMoves.add([i,j]);
+              }
+              break;
+            }
+            candidateMoves.add([i,j]);
+            i+=cords[0];
+            j+=cords[1];
+          }    
+        }
         break;
       case ChessPieceType.queen:
+        var qcords = [[0,1], [0,-1], [1,0], [-1,0], [-1,-1], [-1,1], [1,-1], [1,1],];
+        for(var cords in qcords){
+          int i=row+cords[0], j= col+cords[1];
+          while (isInBoard(i, j)) {
+            if (board[i][j]!=null) {
+              if (board[i][j]!.isWhite!=piece.isWhite) {
+                candidateMoves.add([i,j]);
+              }
+              break;
+            }
+            candidateMoves.add([i,j]);
+            i+=cords[0];
+            j+=cords[1];
+          }
+        }
         break;
+
       case ChessPieceType.king:
+        var kcords = [[0,1], [0,-1], [1,0], [-1,0], [-1,-1], [-1,1], [1,-1], [1,1],];
+        for(var cords in kcords){
+          int i = row+cords[0] , j= col+cords[1];
+          if (isInBoard(i, j) && (board[i][j]==null || board[i][j]!.isWhite!= piece.isWhite)) {
+            candidateMoves.add([i,j]);
+          }
+        }
         break;
       default:
     }
@@ -223,36 +254,97 @@ class _GameBoardState extends State<GameBoard> {
     return candidateMoves;
   }
 
+  // move a chess piece
+  void move(int nrow, int ncol){
+    // if the new spot has an enemy piece store it 
+    if (board[nrow][ncol]!=null) {
+      if (selectedPiece!.isWhite) {
+        blackTaken.add(board[nrow][ncol]!);
+      }else{
+        whiteTaken.add(board[nrow][ncol]!);
+      }
+    }
+
+    board[nrow][ncol] = selectedPiece;
+    board[selectedRow][selectedCol]=null;
+    setState(() {
+      selectedPiece=null;
+      selectedRow=-1;
+      selectedCol=-1;
+      validMoves=[];
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: GridView.builder(
-        itemCount: 8*8,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: 
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8,), 
-        
-        itemBuilder: (context, index){
-          int row = index ~/ 8;
-          int col = index % 8;
-          
-          bool valid=false;
-          for (int i = 0; i < validMoves.length; i++) {
-            if (row==validMoves[i][0] && col==validMoves[i][1]) {
-              valid=true;
-              validMoves.remove([row,col]);
-            }
-          }
-          return Square(
-            isWhite: isWhite(index),
-            piece: board[row][col],
-            isSelected: row == selectedRow && col == selectedCol,
-            onTap: () => pieceSelected(row, col),
-            isValidMove: valid,
-          );
-        },
+      body: Column(
+        children: [
+          // W H I T E  P I E C E S  T A K E N
+          Expanded(
+            flex: 1,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8), 
+              itemBuilder: (context, index){
+                return 
+                Container(
+                  child: index < blackTaken.length? Image.asset(
+                    blackTaken[index].imagePath,
+                    color: Colors.grey[800],
+                  ):null ,
+                );
+              }
+            )
+          ),
 
+          // C H E S S  B O A R D
+          Expanded(
+            flex: 4,
+            child: GridView.builder(
+              itemCount: 8*8,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: 
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8,), 
+              
+              itemBuilder: (context, index){
+                int row = index ~/ 8;
+                int col = index % 8;
+                
+                bool valid=false;
+                for (int i = 0; i < validMoves.length; i++) {
+                  if (row==validMoves[i][0] && col==validMoves[i][1]) {
+                    valid=true;
+                    validMoves.remove([row,col]);
+                  }
+                }
+                return Square(
+                  isWhite: isWhite(index),
+                  piece: board[row][col],
+                  isSelected: row == selectedRow && col == selectedCol,
+                  onTap: () => pieceSelected(row, col),
+                  isValidMove: valid,
+                );
+              },
+            ),
+          ),
+
+          // B L A C K  P I E C E S  T A K E N
+          Expanded(
+            flex: 1,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8), 
+              itemBuilder: (context, index){
+                return 
+                Container(
+                  child: index < whiteTaken.length? Image.asset(
+                    whiteTaken[index].imagePath,
+                    color: Colors.grey[400],
+                  ):null ,
+                );
+              }
+            )
+          ),
+        ],
       ),
     );
   }
