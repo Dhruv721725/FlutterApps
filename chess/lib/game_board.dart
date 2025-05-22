@@ -104,7 +104,6 @@ class _GameBoardState extends State<GameBoard> {
           }
         }
         if (valid) {
-          isWhiteTurn=!isWhiteTurn;
           move(row, col);
         }else{
           // selectedPiece = board[row][col];
@@ -258,52 +257,6 @@ class _GameBoardState extends State<GameBoard> {
     return candidateMoves;
   }
 
-  // List<List<int>> CalculateRealValidMoves(int row, int col, ChessPiece? piece, bool checkSimulation){
-  //   List<List<int>> realValidMoves = [];
-  //   List<List<int>> candidateMoves = _calculateRawValidMoves(row, col, piece);
-  //   if (checkSimulation) {
-  //     for (var move in candidateMoves) {
-  //       int endRow = move[0];
-  //       int endCol = move[1];
-  //       if (simulateMoveIsSafe(piece!,row,col,endRow,endCol)) {
-  //         realValidMoves.add(move);
-  //       }
-  //     }
-  //   }else{
-  //     realValidMoves = candidateMoves;
-  //   }
-  //   return realValidMoves;
-  // }
-
-  // bool simulateMoveIsSafe(ChessPiece piece, int startRow, int startCol, int endRow, int endCol){
-  //   ChessPiece? orginalPiece = board[endRow][endCol];
-  //   List<int>? kingPos ;
-  //   List<int>? originalKingPos;
-  //   if(piece.type==ChessPieceType.king){
-  //     originalKingPos= piece.isWhite ? wking : bking;
-  //     if (piece.isWhite) {
-  //       wking = [endRow,endCol];
-  //     }else{
-  //       bking = [endRow,endCol];
-  //     }
-  //   }
-  //   // simulate the move
-  //   board[endRow][endCol] = piece;
-  //   board[startRow][startCol]=null;
-  //   bool incheck=isKingChecked(piece.isWhite);
-  //   board[startRow][startCol]= piece;
-  //   board[endRow][endCol]= orginalPiece;
-  //   if (piece.type == ChessPieceType.king) {
-  //     if (piece.isWhite) {
-  //       wking = originalKingPos!;
-  //     }else{
-  //       bking=originalKingPos!;
-  //     }
-  //   }
-  //   return !incheck; 
-  // }
-  // move a chess piece
-  
   // calculating real valid moves which dosen't let the king to enter the check
   List<List<int>> calcRealMoves(int row, int col, ChessPiece piece){
     List<List<int>> cmoves = _calculateRawValidMoves(row, col, piece);
@@ -391,7 +344,7 @@ class _GameBoardState extends State<GameBoard> {
     }
     
     // if king is under attack
-    if (isKingChecked(isWhiteTurn)) {
+    if (isKingChecked(!isWhiteTurn)) {
       checkStatus = true;
     }else{
       checkStatus = false;
@@ -403,6 +356,38 @@ class _GameBoardState extends State<GameBoard> {
       selectedCol=-1;
       validMoves=[];
     });
+    
+    if (isCheckMate(!isWhiteTurn)) {
+      showDialog(context: context, builder: (context)=>AlertDialog(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("C H E C K  M A T E !"),
+            Text("${isWhiteTurn?"White" : "Black"} Wins🎉🎊",style: TextStyle(fontSize: 14),),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: resetGame, 
+            child: Text("Play Again")
+          )
+        ],
+      ));
+    }
+
+    isWhiteTurn=!isWhiteTurn;
+  }
+  void resetGame(){
+    validMoves=[];
+    wking = [0,4];
+    bking = [7,4];
+    checkStatus = false;
+    whiteTaken.clear();
+    blackTaken.clear();
+    _initializeBoard();
+    isWhiteTurn = true;
+    setState(() {});
+    Navigator.pop(context);
   }
 
   bool isKingChecked(bool isWhiteKing){
@@ -423,6 +408,29 @@ class _GameBoardState extends State<GameBoard> {
     return false;
   }
 
+  bool isCheckMate(bool isWhiteKing){
+    // if king is not in check !checkmate
+    if (!isKingChecked(isWhiteKing)) {
+      return false;
+    }
+    
+    // if their is at least one legal move for any of the player's pieces !checkmate
+    for(int i=0; i<8; i++){
+      for (int j=0; j<8; j++){
+        if (board[i][j]==null || board[i][j]!.isWhite!=isWhiteKing) {
+          continue;
+        }
+
+        List<List<int>> validMoves = calcRealMoves(i, j, board[i][j]!);
+        if (validMoves.isNotEmpty) {
+          return false;
+        }
+      }
+    }
+
+    // no legal moves to make ad king is checked its's checkmate
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
