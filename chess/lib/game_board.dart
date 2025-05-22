@@ -34,7 +34,6 @@ class _GameBoardState extends State<GameBoard> {
   List <int> bking = [7,4];
   bool checkStatus = false;
 
-
   @override
   void initState() {
     super.initState();
