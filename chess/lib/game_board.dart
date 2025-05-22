@@ -30,6 +30,9 @@ class _GameBoardState extends State<GameBoard> {
   // for getting players turn
   bool isWhiteTurn = true;
 
+  List <int> wking = [0,4];
+  List <int> bking = [7,4];
+  bool checkStatus = false;
 
 
   @override
@@ -68,13 +71,14 @@ class _GameBoardState extends State<GameBoard> {
   
     // placing queens
     newBoard[0][3] = ChessPiece(imagePath: "pieces/queen.png", isWhite: true, type: ChessPieceType.queen);
-    newBoard[7][4] = ChessPiece(imagePath: "pieces/queen.png", isWhite: false, type: ChessPieceType.queen);
+    newBoard[7][3] = ChessPiece(imagePath: "pieces/queen.png", isWhite: false, type: ChessPieceType.queen);
     
     // placing kings
     newBoard[0][4] = ChessPiece(imagePath: "pieces/king.png", isWhite: true, type: ChessPieceType.king);
-    newBoard[7][3] = ChessPiece(imagePath: "pieces/king.png", isWhite: false, type: ChessPieceType.king);
+    newBoard[7][4] = ChessPiece(imagePath: "pieces/king.png", isWhite: false, type: ChessPieceType.king);
     
     //test set
+    
     board = newBoard;
   }
 
@@ -112,14 +116,14 @@ class _GameBoardState extends State<GameBoard> {
       }
       // if a piece is selected its valid moves
       if (selectedPiece!=null) {
-        validMoves = CalculateRawValidMoves(row, col, selectedPiece);
+        validMoves = calcRealMoves(row, col, selectedPiece!);
       }else{
         validMoves = [];
       }
     });
   }
 
-  List<List<int>> CalculateRawValidMoves(int row, int col, ChessPiece? piece){
+  List<List<int>> _calculateRawValidMoves(int row, int col, ChessPiece? piece){
     List<List<int>> candidateMoves = [];
 
     int direction = piece!.isWhite? 1: -1;
@@ -254,7 +258,117 @@ class _GameBoardState extends State<GameBoard> {
     return candidateMoves;
   }
 
+  // List<List<int>> CalculateRealValidMoves(int row, int col, ChessPiece? piece, bool checkSimulation){
+  //   List<List<int>> realValidMoves = [];
+  //   List<List<int>> candidateMoves = _calculateRawValidMoves(row, col, piece);
+  //   if (checkSimulation) {
+  //     for (var move in candidateMoves) {
+  //       int endRow = move[0];
+  //       int endCol = move[1];
+  //       if (simulateMoveIsSafe(piece!,row,col,endRow,endCol)) {
+  //         realValidMoves.add(move);
+  //       }
+  //     }
+  //   }else{
+  //     realValidMoves = candidateMoves;
+  //   }
+  //   return realValidMoves;
+  // }
+
+  // bool simulateMoveIsSafe(ChessPiece piece, int startRow, int startCol, int endRow, int endCol){
+  //   ChessPiece? orginalPiece = board[endRow][endCol];
+  //   List<int>? kingPos ;
+  //   List<int>? originalKingPos;
+  //   if(piece.type==ChessPieceType.king){
+  //     originalKingPos= piece.isWhite ? wking : bking;
+  //     if (piece.isWhite) {
+  //       wking = [endRow,endCol];
+  //     }else{
+  //       bking = [endRow,endCol];
+  //     }
+  //   }
+  //   // simulate the move
+  //   board[endRow][endCol] = piece;
+  //   board[startRow][startCol]=null;
+  //   bool incheck=isKingChecked(piece.isWhite);
+  //   board[startRow][startCol]= piece;
+  //   board[endRow][endCol]= orginalPiece;
+  //   if (piece.type == ChessPieceType.king) {
+  //     if (piece.isWhite) {
+  //       wking = originalKingPos!;
+  //     }else{
+  //       bking=originalKingPos!;
+  //     }
+  //   }
+  //   return !incheck; 
+  // }
   // move a chess piece
+  
+  // calculating real valid moves which dosen't let the king to enter the check
+  List<List<int>> calcRealMoves(int row, int col, ChessPiece piece){
+    List<List<int>> cmoves = _calculateRawValidMoves(row, col, piece);
+    List<List<int>> vmoves = [];
+
+    if (piece.type!=ChessPieceType.king) {
+      for (var cord in cmoves) {
+        if (isMoveSafe(piece, row, col, cord[0], cord[1])) {
+          vmoves.add(cord);
+        }
+      }
+    }else{
+      List<int> originalKingPos = piece.isWhite ? wking : bking;
+      for (var cord in cmoves) {
+        // simulated
+        ChessPiece? temp = board[cord[0]][cord[1]];
+        board[cord[0]][cord[1]]=piece;
+        board[row][col]=null;
+
+        if (piece.isWhite) {
+          wking = [cord[0],cord[1]]; 
+        }else{
+          bking = [cord[0],cord[1]];
+        }
+
+        if (!isKingChecked(piece.isWhite)) {
+          vmoves.add(cord); 
+        }
+
+        board[row][col] = piece;
+        board[cord[0]][cord[1]] = temp;
+
+        if (piece.isWhite) {
+          wking = originalKingPos;
+        }else{
+          bking = originalKingPos;
+        }
+      }
+    }
+
+    return vmoves;
+  }
+
+  bool isMoveSafe(ChessPiece piece, int row, int col, int drow, int dcol){
+    // simulating movements
+    bool safe = true;
+    // piece at destination 
+    ChessPiece? temp = board[drow][dcol];
+    board[drow][dcol] = board[row][col];
+    board[row][col] = null;
+
+    // getting cords of king of color of piece
+    List<int> kingPos = piece!.isWhite ? wking : bking;
+
+    if (isKingChecked(piece!.isWhite)) {
+      safe=false;
+    }
+
+    // putting pieces back
+    board[row][col] = board[drow][dcol];
+    board[drow][dcol] = temp;
+
+    return safe;
+  }
+
   void move(int nrow, int ncol){
     // if the new spot has an enemy piece store it 
     if (board[nrow][ncol]!=null) {
@@ -267,6 +381,22 @@ class _GameBoardState extends State<GameBoard> {
 
     board[nrow][ncol] = selectedPiece;
     board[selectedRow][selectedCol]=null;
+
+    if (selectedPiece!.type==ChessPieceType.king) {
+      if (selectedPiece!.isWhite) {
+        wking = [nrow, ncol];
+      }else{
+        bking = [nrow, ncol];
+      }
+    }
+    
+    // if king is under attack
+    if (isKingChecked(isWhiteTurn)) {
+      checkStatus = true;
+    }else{
+      checkStatus = false;
+    }
+
     setState(() {
       selectedPiece=null;
       selectedRow=-1;
@@ -274,6 +404,25 @@ class _GameBoardState extends State<GameBoard> {
       validMoves=[];
     });
   }
+
+  bool isKingChecked(bool isWhiteKing){
+    List<int> kingPos = isWhiteKing ? wking: bking;
+    // check if any enemy piece can attack the king
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        // skip the empty spaces and pieces of same colors
+        if (board[i][j]==null || board[i][j]!.isWhite==isWhiteKing){
+          continue;
+        }
+        List<List<int>> cords = _calculateRawValidMoves(i, j, board[i][j]);
+        if (cords.any((cord)=>kingPos[0]==cord[0] && kingPos[1]==cord[1])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,6 +445,9 @@ class _GameBoardState extends State<GameBoard> {
               }
             )
           ),
+          
+          // C H E C K  S T A T U S
+          Text(checkStatus ? "C H E C K !":"", textAlign: TextAlign.center,),
 
           // C H E S S  B O A R D
           Expanded(
