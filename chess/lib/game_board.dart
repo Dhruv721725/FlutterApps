@@ -46,35 +46,35 @@ class _GameBoardState extends State<GameBoard> {
     
     // placing pawns
     for (int i = 0; i < 8; i++) {
-      newBoard[1][i] = ChessPiece(imagePath: "pieces/pawn.png", isWhite: true, type: ChessPieceType.pawn);
-      newBoard[6][i] = ChessPiece(imagePath: "pieces/pawn.png", isWhite: false, type: ChessPieceType.pawn);
+      newBoard[1][i] = ChessPiece(imagePath: "lib/pieces/pawn.png", isWhite: true, type: ChessPieceType.pawn);
+      newBoard[6][i] = ChessPiece(imagePath: "lib/pieces/pawn.png", isWhite: false, type: ChessPieceType.pawn);
     }
 
     // placing rooks
-    newBoard[0][0] = ChessPiece(imagePath: "pieces/rook.png", isWhite: true, type: ChessPieceType.rook);
-    newBoard[0][7] = ChessPiece(imagePath: "pieces/rook.png", isWhite: true, type: ChessPieceType.rook);
-    newBoard[7][0] = ChessPiece(imagePath: "pieces/rook.png", isWhite: false, type: ChessPieceType.rook);
-    newBoard[7][7] = ChessPiece(imagePath: "pieces/rook.png", isWhite: false, type: ChessPieceType.rook);
+    newBoard[0][0] = ChessPiece(imagePath: "lib/pieces/rook.png", isWhite: true, type: ChessPieceType.rook);
+    newBoard[0][7] = ChessPiece(imagePath: "lib/pieces/rook.png", isWhite: true, type: ChessPieceType.rook);
+    newBoard[7][0] = ChessPiece(imagePath: "lib/pieces/rook.png", isWhite: false, type: ChessPieceType.rook);
+    newBoard[7][7] = ChessPiece(imagePath: "lib/pieces/rook.png", isWhite: false, type: ChessPieceType.rook);
     
     // placing knights
-    newBoard[0][1] = ChessPiece(imagePath: "pieces/knight.png", isWhite: true, type: ChessPieceType.knight);
-    newBoard[0][6] = ChessPiece(imagePath: "pieces/knight.png", isWhite: true, type: ChessPieceType.knight);
-    newBoard[7][1] = ChessPiece(imagePath: "pieces/knight.png", isWhite: false, type: ChessPieceType.knight);
-    newBoard[7][6] = ChessPiece(imagePath: "pieces/knight.png", isWhite: false, type: ChessPieceType.knight);
+    newBoard[0][1] = ChessPiece(imagePath: "lib/pieces/knight.png", isWhite: true, type: ChessPieceType.knight);
+    newBoard[0][6] = ChessPiece(imagePath: "lib/pieces/knight.png", isWhite: true, type: ChessPieceType.knight);
+    newBoard[7][1] = ChessPiece(imagePath: "lib/pieces/knight.png", isWhite: false, type: ChessPieceType.knight);
+    newBoard[7][6] = ChessPiece(imagePath: "lib/pieces/knight.png", isWhite: false, type: ChessPieceType.knight);
     
     // placing bishops
-    newBoard[0][2] = ChessPiece(imagePath: "pieces/bishop.png", isWhite: true, type: ChessPieceType.bishop);
-    newBoard[0][5] = ChessPiece(imagePath: "pieces/bishop.png", isWhite: true, type: ChessPieceType.bishop);
-    newBoard[7][2] = ChessPiece(imagePath: "pieces/bishop.png", isWhite: false, type: ChessPieceType.bishop);
-    newBoard[7][5] = ChessPiece(imagePath: "pieces/bishop.png", isWhite: false, type: ChessPieceType.bishop);
+    newBoard[0][2] = ChessPiece(imagePath: "lib/pieces/bishop.png", isWhite: true, type: ChessPieceType.bishop);
+    newBoard[0][5] = ChessPiece(imagePath: "lib/pieces/bishop.png", isWhite: true, type: ChessPieceType.bishop);
+    newBoard[7][2] = ChessPiece(imagePath: "lib/pieces/bishop.png", isWhite: false, type: ChessPieceType.bishop);
+    newBoard[7][5] = ChessPiece(imagePath: "lib/pieces/bishop.png", isWhite: false, type: ChessPieceType.bishop);
   
     // placing queens
-    newBoard[0][3] = ChessPiece(imagePath: "pieces/queen.png", isWhite: true, type: ChessPieceType.queen);
-    newBoard[7][3] = ChessPiece(imagePath: "pieces/queen.png", isWhite: false, type: ChessPieceType.queen);
+    newBoard[0][3] = ChessPiece(imagePath: "lib/pieces/queen.png", isWhite: true, type: ChessPieceType.queen);
+    newBoard[7][3] = ChessPiece(imagePath: "lib/pieces/queen.png", isWhite: false, type: ChessPieceType.queen);
     
     // placing kings
-    newBoard[0][4] = ChessPiece(imagePath: "pieces/king.png", isWhite: true, type: ChessPieceType.king);
-    newBoard[7][4] = ChessPiece(imagePath: "pieces/king.png", isWhite: false, type: ChessPieceType.king);
+    newBoard[0][4] = ChessPiece(imagePath: "lib/pieces/king.png", isWhite: true, type: ChessPieceType.king);
+    newBoard[7][4] = ChessPiece(imagePath: "lib/pieces/king.png", isWhite: false, type: ChessPieceType.king);
     
     //test set
     
@@ -362,12 +362,12 @@ class _GameBoardState extends State<GameBoard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("C H E C K  M A T E !"),
-            Text("${isWhiteTurn?"White" : "Black"} Wins🎉🎊",style: TextStyle(fontSize: 14),),
+            Text("${isWhiteTurn? "Black" : "White"} Wins🎉🎊",style: TextStyle(fontSize: 14),),
           ],
         ),
         actions: [
           TextButton(
-            onPressed: resetGame, 
+            onPressed:resetGame,
             child: Text("Play Again")
           )
         ],
@@ -432,78 +432,104 @@ class _GameBoardState extends State<GameBoard> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Column(
-        children: [
-          // W H I T E  P I E C E S  T A K E N
-          Expanded(
-            flex: 1,
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8), 
-              itemBuilder: (context, index){
-                return 
-                Container(
-                  child: index < blackTaken.length? Image.asset(
-                    blackTaken[index].imagePath,
-                    color: Colors.grey[800],
-                  ):null ,
-                );
-              }
-            )
-          ),
-          
-          // C H E C K  S T A T U S
-          Text(checkStatus ? "C H E C K !":"", textAlign: TextAlign.center,),
-
-          // C H E S S  B O A R D
-          Expanded(
-            flex: 4,
-            child: GridView.builder(
-              itemCount: 8*8,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: 
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8,), 
-              
-              itemBuilder: (context, index){
-                int row = index ~/ 8;
-                int col = index % 8;
-                
-                bool valid=false;
-                for (int i = 0; i < validMoves.length; i++) {
-                  if (row==validMoves[i][0] && col==validMoves[i][1]) {
-                    valid=true;
-                    validMoves.remove([row,col]);
-                  }
-                }
-                return Square(
-                  isWhite: isWhite(index),
-                  piece: board[row][col],
-                  isSelected: row == selectedRow && col == selectedCol,
-                  onTap: () => pieceSelected(row, col),
-                  isValidMove: valid,
-                );
-              },
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: (){
+                    showDialog(context: context, builder: (context)=>AlertDialog(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Restart the game!"),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: resetGame, 
+                          child: Text("Restart")
+                        )
+                      ],
+                    ));
+                  }, 
+                  icon: Icon(Icons.restore)
+                )
+              ]
             ),
-          ),
-
-          // B L A C K  P I E C E S  T A K E N
-          Expanded(
-            flex: 1,
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8), 
-              itemBuilder: (context, index){
-                return 
-                Container(
-                  child: index < whiteTaken.length? Image.asset(
-                    whiteTaken[index].imagePath,
-                    color: Colors.grey[400],
-                  ):null ,
-                );
-              }
-            )
-          ),
-        ],
+      
+            // W H I T E  P I E C E S  T A K E N
+            Expanded(
+              flex: 1,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8), 
+                itemBuilder: (context, index){
+                  return 
+                  Container(
+                    child: index < blackTaken.length? Image.asset(
+                      blackTaken[index].imagePath,
+                      color: Colors.grey[800],
+                    ):null ,
+                  );
+                }
+              )
+            ),
+            
+            // C H E C K  S T A T U S
+            Text(checkStatus ? "C H E C K !":"", textAlign: TextAlign.center,),
+      
+            // C H E S S  B O A R D
+            Expanded(
+              flex: 4,
+              child: GridView.builder(
+                itemCount: 8*8,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: 
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8,), 
+                
+                itemBuilder: (context, index){
+                  int row = index ~/ 8;
+                  int col = index % 8;
+                  
+                  bool valid=false;
+                  for (int i = 0; i < validMoves.length; i++) {
+                    if (row==validMoves[i][0] && col==validMoves[i][1]) {
+                      valid=true;
+                      validMoves.remove([row,col]);
+                    }
+                  }
+                  return Square(
+                    isWhite: isWhite(index),
+                    piece: board[row][col],
+                    isSelected: row == selectedRow && col == selectedCol,
+                    onTap: () => pieceSelected(row, col),
+                    isValidMove: valid,
+                  );
+                },
+              ),
+            ),
+      
+            // B L A C K  P I E C E S  T A K E N
+            Expanded(
+              flex: 1,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8), 
+                itemBuilder: (context, index){
+                  return 
+                  Container(
+                    child: index < whiteTaken.length? Image.asset(
+                      whiteTaken[index].imagePath,
+                      color: Colors.grey[400],
+                    ):null ,
+                  );
+                }
+              )
+            ),
+          ],
+        ),
       ),
     );
   }
