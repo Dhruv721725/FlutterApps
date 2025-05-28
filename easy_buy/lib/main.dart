@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:easy_buy/utils/theme/theme.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -11,11 +11,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Scaffold()
+      themeMode: ThemeMode.system,
+      theme: EBTheme.lightTheme,
+      darkTheme: EBTheme.darkTheme,
     );
   }
 }
