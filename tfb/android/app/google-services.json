@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "940648559227",
+    "project_id": "crud-74",
+    "storage_bucket": "crud-74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940648559227:android:518206ac4ffd6ec9a628de",
+        "android_client_info": {
+          "package_name": "com.example.crud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940648559227-1qcop2oa1ga7ko3to8g1pen2jensgno2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxsuBGQgr-2ZyixZgedg4NVWFKaSxi8rY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940648559227-1qcop2oa1ga7ko3to8g1pen2jensgno2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "940648559227-shhu4kj5o0u5veod8gtlcgijqv3k6nle.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tfb"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940648559227:android:8195952fbf0dd12ea628de",
+        "android_client_info": {
+          "package_name": "com.example.tfb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940648559227-1qcop2oa1ga7ko3to8g1pen2jensgno2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxsuBGQgr-2ZyixZgedg4NVWFKaSxi8rY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940648559227-1qcop2oa1ga7ko3to8g1pen2jensgno2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "940648559227-shhu4kj5o0u5veod8gtlcgijqv3k6nle.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tfb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
