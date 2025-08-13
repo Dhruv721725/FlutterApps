@@ -1,0 +1,296 @@
+1️⃣ Project Setup
+A. Create a Supabase Project
+
+Go to https://supabase.com → Sign in with GitHub or email.
+
+Click "New Project".
+
+Give it a name → Choose Region → Set a Database password (store it safely).
+
+Once created, go to Project Settings → API and note:
+
+Project URL
+
+anon public API key (for client apps)
+
+B. Create Flutter Project & Install Packages
+
+bash
+Copy
+Edit
+flutter create supabase_demo
+cd supabase_demo
+flutter pub add supabase_flutter
+C. Initialize Supabase in Flutter
+In lib/main.dart:
+
+dart
+Copy
+Edit
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'YOUR_PROJECT_URL',  // from Supabase dashboard
+    anonKey: 'YOUR_ANON_KEY', // from Supabase dashboard
+  );
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Supabase Flutter',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const Scaffold(body: Center(child: Text("Supabase Setup Done"))),
+    );
+  }
+}
+Run:
+
+bash
+Copy
+Edit
+flutter run
+2️⃣ Authentication
+Supabase provides:
+
+Email/Password auth
+
+Magic Link
+
+Social Sign-In (Google, GitHub, etc.)
+
+Forgot password
+
+A. Email Sign-Up
+dart
+Copy
+Edit
+Future<void> signUp(String email, String password) async {
+  final res = await Supabase.instance.client.auth.signUp(
+    email: email,
+    password: password,
+  );
+
+  if (res.user != null) {
+    print("✅ Sign-up successful, check your email for verification.");
+  } else {
+    print("❌ Error: ${res.session}");
+  }
+}
+B. Email Sign-In
+dart
+Copy
+Edit
+Future<void> signIn(String email, String password) async {
+  final res = await Supabase.instance.client.auth.signInWithPassword(
+    email: email,
+    password: password,
+  );
+
+  if (res.session != null) {
+    print("✅ Logged in successfully.");
+  } else {
+    print("❌ Invalid credentials.");
+  }
+}
+C. Forgot Password
+Supabase sends a reset link to the user’s email.
+
+dart
+Copy
+Edit
+Future<void> forgotPassword(String email) async {
+  await Supabase.instance.client.auth.resetPasswordForEmail(email);
+  print("📩 Password reset email sent.");
+}
+⚠️ Note: In Supabase dashboard → Authentication → URL config, set:
+
+perl
+Copy
+Edit
+Site URL: https://yourapp.com
+Redirect URL for reset: custom://reset-password
+In Flutter, you’ll handle the deep link to update password.
+
+D. Google SSO
+Enable Google in Supabase:
+
+Dashboard → Authentication → Providers → Google → Enable
+
+Add your OAuth credentials from Google Cloud Console.
+
+Flutter code:
+
+dart
+Copy
+Edit
+Future<void> signInWithGoogle() async {
+  await Supabase.instance.client.auth.signInWithOAuth(Provider.google);
+}
+This opens the browser for Google login.
+
+3️⃣ CRUD Operations
+Create a table in Supabase:
+
+Go to Dashboard → Table Editor → New Table
+Example: notes
+
+id → int8, PK
+
+title → text
+
+content → text
+
+A. Insert
+dart
+Copy
+Edit
+Future<void> insertNote() async {
+  final response = await Supabase.instance.client
+      .from('notes')
+      .insert({'title': 'My Note', 'content': 'This is a test note.'});
+
+  print(response);
+}
+B. Read
+dart
+Copy
+Edit
+Future<void> getNotes() async {
+  final notes = await Supabase.instance.client.from('notes').select();
+  print(notes);
+}
+C. Update
+dart
+Copy
+Edit
+Future<void> updateNote() async {
+  final response = await Supabase.instance.client
+      .from('notes')
+      .update({'content': 'Updated content'})
+      .eq('id', 1);
+
+  print(response);
+}
+D. Delete
+dart
+Copy
+Edit
+Future<void> deleteNote() async {
+  final response = await Supabase.instance.client
+      .from('notes')
+      .delete()
+      .eq('id', 1);
+
+  print(response);
+}
+4️⃣ Media File Storage
+Supabase Dashboard → Storage → New Bucket (e.g. media).
+
+Set public/private as needed.
+
+A. Upload File
+dart
+Copy
+Edit
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+
+Future<void> uploadFile() async {
+  final result = await FilePicker.platform.pickFiles();
+  if (result != null) {
+    final file = File(result.files.single.path!);
+    final fileName = result.files.single.name;
+
+    final response = await Supabase.instance.client.storage
+        .from('media')
+        .upload(fileName, file);
+
+    print("Uploaded: $response");
+  }
+}
+B. Get Public URL
+dart
+Copy
+Edit
+String getPublicUrl(String fileName) {
+  return Supabase.instance.client.storage.from('media').getPublicUrl(fileName);
+}
+C. Delete File
+dart
+Copy
+Edit
+Future<void> deleteFile(String fileName) async {
+  await Supabase.instance.client.storage.from('media').remove([fileName]);
+}
+✅ Flow Recap:
+
+Auth → Email/Password + Forgot Password + Google SSO
+
+CRUD → Basic operations on Postgres
+
+Storage → Upload, get URL, delete
+
+
+Step 1: Go to Google Cloud Console
+Visit: https://console.cloud.google.com/
+
+Make sure you are logged in with the correct Google account.
+
+Select your project from the top-left project selector.
+
+Step 2: Open the API & Services Section
+In the left sidebar, click ☰ Navigation menu → APIs & Services → Credentials.
+
+Step 3: Locate Your OAuth 2.0 Client
+Under "OAuth 2.0 Client IDs", you’ll see a list of credentials you created.
+
+Find the one you need (e.g., for Web app, Android, iOS, or Desktop app).
+
+Step 4: View & Download Credentials
+Click on the name of your OAuth 2.0 Client ID.
+
+You’ll see:
+
+Client ID → Used in your app for authentication requests.
+
+Client Secret → Keep this private, never expose in frontend code.
+
+To download:
+
+On the Credentials page, click the Download JSON icon 📥 next to your OAuth 2.0 client.
+
+This JSON file contains:
+
+json
+Copy
+Edit
+{
+  "web": {
+    "client_id": "YOUR_CLIENT_ID",
+    "project_id": "your-project-id",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "redirect_uris": [
+      "http://localhost:8080/callback"
+    ]
+  }
+}
+Step 5: Secure & Use
+Store the JSON securely (for Flutter/Dart, put it in .gitignore if in your project).
+
+Use the Client ID in frontend SDKs (e.g., Google Sign-In).
+
+Use both Client ID & Secret in server-side authentication flows.
+
