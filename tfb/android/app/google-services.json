@@ -50,6 +50,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "940648559227-nljub4s852s7rnoeviok0ib9h5ql2ped.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tfb",
+            "certificate_hash": "aa54d65e6e0e866128e72b23667af6ff57b6debf"
+          }
+        },
+        {
           "client_id": "940648559227-1qcop2oa1ga7ko3to8g1pen2jensgno2.apps.googleusercontent.com",
           "client_type": 3
         }

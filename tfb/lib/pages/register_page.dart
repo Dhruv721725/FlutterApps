@@ -61,91 +61,93 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade800,
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Lottie.asset(
-              'lottieFiles/login.json',
-              fit: BoxFit.cover,
-              height: 150,
-              repeat: true
-            ),
-
-            SizedBox(height: 20,),
-
-            Text("Welcome! to our community.",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.inversePrimary,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade800,
+        body: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Lottie.asset(
+                'assets/login.json',
+                fit: BoxFit.cover,
+                height: 150,
+                repeat: true
               ),
-            ),
-
-            SizedBox(height: 20,),
-
-            CompField(
-              controller: nameController,
-              obscureText: false,
-              hintText: "name",
-            ),
-
-            CompField(
-              controller: emailController, 
-              hintText: "email", 
-              obscureText: false
-            ),
-
-            CompField(
-              controller: passController, 
-              hintText: "password", 
-              obscureText: _obscurePass,
-              suffix: IconButton(
-                onPressed:(){
-                  setState(() {
-                    _obscurePass = !_obscurePass;
-                  });
-                } , 
-                icon: Icon(_obscurePass? Icons.visibility:Icons.visibility_off)
-              ),
-            ),
-
-            CompField(
-              controller: cnfrmPassController, 
-              hintText: "confirm password", 
-              obscureText:_obscureCnfrmPass,
-              suffix: IconButton(
-                onPressed:(){
-                  setState(() {
-                    _obscureCnfrmPass = !_obscureCnfrmPass;
-                  });
-                } , 
-                icon: Icon(_obscureCnfrmPass? Icons.visibility:Icons.visibility_off)
-              ),
-            ),
-            SizedBox(height: 30,),
-            CompButton(
-              onPress: registerAcc,
-              title: "Register Me"
-            ),
-            SizedBox(height: 20,),
-            GestureDetector(
-              onTap: widget.toggle,
-              child: Text("Already a member! Login here",
-                textAlign: TextAlign.center,
+      
+              SizedBox(height: 20,),
+      
+              Text("Welcome! to our community.",
                 style: TextStyle(
-                  fontFamily: "rajdhani",
-                  fontSize: 16,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  fontWeight: FontWeight.w300
                 ),
               ),
-            )
-          ],
+      
+              SizedBox(height: 20,),
+      
+              CompField(
+                controller: nameController,
+                obscureText: false,
+                hintText: "name",
+              ),
+      
+              CompField(
+                controller: emailController, 
+                hintText: "email", 
+                obscureText: false
+              ),
+      
+              CompField(
+                controller: passController, 
+                hintText: "password", 
+                obscureText: _obscurePass,
+                suffix: IconButton(
+                  onPressed:(){
+                    setState(() {
+                      _obscurePass = !_obscurePass;
+                    });
+                  } , 
+                  icon: Icon(_obscurePass? Icons.visibility:Icons.visibility_off)
+                ),
+              ),
+      
+              CompField(
+                controller: cnfrmPassController, 
+                hintText: "confirm password", 
+                obscureText:_obscureCnfrmPass,
+                suffix: IconButton(
+                  onPressed:(){
+                    setState(() {
+                      _obscureCnfrmPass = !_obscureCnfrmPass;
+                    });
+                  } , 
+                  icon: Icon(_obscureCnfrmPass? Icons.visibility:Icons.visibility_off)
+                ),
+              ),
+              SizedBox(height: 30,),
+              CompButton(
+                onPress: registerAcc,
+                title: "Register Me"
+              ),
+              SizedBox(height: 20,),
+              GestureDetector(
+                onTap: widget.toggle,
+                child: Text("Already a member! Login here",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "rajdhani",
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    fontWeight: FontWeight.w300
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
