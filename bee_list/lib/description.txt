@@ -1,0 +1,16 @@
+U can add a item
+Each item will have a title.
+
+U can add a "text box", "list tile" and "notifier" to that item.
+Text box will be a simple text box 
+with time and date and 
+option for delete and edit 
+with text box title or only content. 
+
+List tile will have a check box 
+a text content and 
+a quantity with unit. 
+
+Notifier will have 
+a text content to be shown on notification and 
+time at which notification will be popup.
