@@ -1,4 +1,5 @@
 import 'package:bee_list/pages/home_page.dart';
+import 'package:bee_list/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,9 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bee\'s List',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: theme,
       home: HomePage(),
     );
   }
