@@ -9,7 +9,7 @@ ThemeData theme = ThemeData(
     onSurface: Colors.grey.shade700,
     inversePrimary: Colors.grey.shade800,
     tertiary: Colors.black,
-    primaryContainer: Colors.redAccent,
-    secondaryContainer: Colors.greenAccent
+    primaryContainer: Colors.red,
+    secondaryContainer: Colors.green
   )
 );

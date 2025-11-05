@@ -1,3 +1,4 @@
+import 'package:bee_list/components/edit_item.dart';
 import 'package:bee_list/components/list_item_tile.dart';
 import 'package:bee_list/data.dart';
 import 'package:bee_list/pages/item_page.dart';
@@ -36,7 +37,18 @@ class HomePage extends StatelessWidget{
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: (){print("creating item tile");},
+        onPressed: (){
+          TextEditingController controller=new TextEditingController();
+          showDialog(context: context, 
+            builder: (context)=>EditItem(
+              title: "Title",
+              controller: controller, 
+              onSave: (){
+                print("Saved");
+              }
+            )
+          );
+        },
         child: Icon(
           Icons.add, 
           color:Theme.of(context).colorScheme.inversePrimary,

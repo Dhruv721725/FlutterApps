@@ -1,15 +1,21 @@
+import 'package:bee_list/components/views.dart';
+
 Map<String,Map<String,List<Map<String,dynamic>>>> Data = {
   "Daily Essentials":{
     "Notifications": [
       {
         "text": "Check your daily tasks.",
         "time": DateTime.now(),
-        "day" : 1
+        "day" : weekDays()[1],
+        "hr"  : 22,
+        "min" : 20,
       },
       {
         "text": "",
         "time": DateTime.now(),
-        "day" : "Every Day"
+        "day" : weekDays()[7],
+        "hr"  : 22,
+        "min" : 25,
       }
     ],
     "Notes":[
@@ -55,12 +61,16 @@ Map<String,Map<String,List<Map<String,dynamic>>>> Data = {
       {
         "text": "Be well dressed.",
         "time": DateTime.now(),
-        "day" : 1
+        "day" : weekDays()[0],
+        "hr"  : 22,
+        "min" : 20,
       },
       {
         "text": "Don't forget Hankey",
         "time": DateTime.now(),
-        "day" : 1
+        "day" : weekDays()[2],
+        "hr"  : 22,
+        "min" : 20,
       }
     ],
     "Notes":[

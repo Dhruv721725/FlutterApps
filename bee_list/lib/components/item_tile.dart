@@ -1,4 +1,4 @@
-import 'package:bee_list/components/functions.dart';
+import 'package:bee_list/components/views.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,7 +20,7 @@ class _ItemTileState extends State<ItemTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        margin: EdgeInsets.fromLTRB(0,0,0,5),
+        margin: EdgeInsets.fromLTRB(0,0,0,4),
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
