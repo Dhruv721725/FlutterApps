@@ -1,14 +1,15 @@
-import 'package:bee_list/components/views.dart';
+import 'package:bee_list/components/db.dart';
+import 'package:bee_list/components/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ItemTile extends StatefulWidget{
-  final String text;
-  bool check;
+  int listId;
+  int itemId;
   ItemTile({
     super.key,
-    required this.text,
-    required this.check,
+    required this.listId,
+    required this.itemId,
   });
 
   @override
@@ -16,8 +17,11 @@ class ItemTile extends StatefulWidget{
 }
 
 class _ItemTileState extends State<ItemTile> {
+  
   @override
   Widget build(BuildContext context) {
+    Item item = Db.getItems(widget.listId)[widget.itemId];
+
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.fromLTRB(0,0,0,4),
@@ -31,10 +35,11 @@ class _ItemTileState extends State<ItemTile> {
 
             Checkbox(
               checkColor: Theme.of(context).colorScheme.onSurface,
-              value: widget.check, 
+              value: item.check, 
               onChanged:(v){
                 setState(() {
-                  widget.check=!widget.check;
+                  Db.toggleCheck(widget.listId, widget.itemId);
+                  item = Db.getItems(widget.listId)[widget.itemId];
                 });
               }
             ),
@@ -48,9 +53,9 @@ class _ItemTileState extends State<ItemTile> {
             SizedBox(width: 8,),
 
             Text(
-              widget.text,
+              item.text,
               style: TextStyle(
-                decoration: widget.check? TextDecoration.lineThrough : null,
+                decoration: item.check? TextDecoration.lineThrough : null,
               ),
             ),
 

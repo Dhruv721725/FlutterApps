@@ -1,4 +1,4 @@
-import 'package:bee_list/components/views.dart';
+import 'package:bee_list/components/models.dart';
 
 Map<String,Map<String,List<Map<String,dynamic>>>> Data = {
   "Daily Essentials":{

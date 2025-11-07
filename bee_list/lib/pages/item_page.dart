@@ -1,6 +1,8 @@
+import 'package:bee_list/components/db.dart';
 import 'package:bee_list/components/delete_alert.dart';
 import 'package:bee_list/components/edit_item.dart';
 import 'package:bee_list/components/item_tile.dart';
+import 'package:bee_list/components/models.dart';
 import 'package:bee_list/components/note_tile.dart';
 import 'package:bee_list/data.dart';
 import 'package:bee_list/pages/note_page.dart';
@@ -9,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ItemPage extends StatefulWidget {
-  int index;
-  ItemPage({
+  final int index;
+  const ItemPage({
     super.key,
     required this.index 
   });
@@ -20,11 +22,14 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage> {
   late String key;
+  late List<Item> items;
+  late List<Note> notes;
+  late List<AppNotification> notifiers;
   @override 
   void initState() {
-    key=Data.keys.toList()[widget.index];
+    key=Db.getListItems().toList()[widget.index].title;
     super.initState();
-
+    items = Db.getItems(widget.index);
   }
 
   void onCreateNote(){
@@ -37,6 +42,15 @@ class _ItemPageState extends State<ItemPage> {
       builder: (context)=>EditItem(title: "Item", controller: controller, 
         onSave: (){
 
+          setState(() {
+            Db.addItem(widget.index, 
+              Item(text: controller.text, 
+                check: false,
+                time: DateTime.now()
+              )
+            );
+            items = Db.getItems(widget.index);
+          });
         }
       )
     );
@@ -92,55 +106,54 @@ class _ItemPageState extends State<ItemPage> {
         
         child: Column(
           children: [
-            Data[key]!["Notifications"]!=null?
-            GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage(text: key))),
-              child: Container(
-                padding: EdgeInsets.all(4),
-                margin: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(child: Text("Notifications")),
-              ),
-            )
-            :SizedBox(),
-            // Notes 
-            Data[key]!["Notes"]!=null 
-            ? SizedBox(
-              height: 150,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: Data[key]!["Notes"]!.length,
+            // Data[key]!["Notifications"]!=null?
+            // GestureDetector(
+            //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage(text: key))),
+            //   child: Container(
+            //     padding: EdgeInsets.all(4),
+            //     margin: EdgeInsets.all(4),
+            //     decoration: BoxDecoration(
+            //       color: Theme.of(context).colorScheme.secondary,
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     child: Center(child: Text("Notifications")),
+            //   ),
+            // )
+            // :SizedBox(),
+            // // Notes 
+            // Data[key]!["Notes"]!=null 
+            // ? SizedBox(
+            //   height: 150,
+            //   child: ListView.builder(
+            //     shrinkWrap: true,
+            //     scrollDirection: Axis.horizontal,
+            //     itemCount: Data[key]!["Notes"]!.length,
                 
-                itemBuilder:(context, id){
-                  Map<String,dynamic> note = Data[key]!["Notes"]![id];
-                  return GestureDetector(
-                    onTap: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (context)=>NotePage(keyText: key,id: id,))
-                    ),
-                    child: NoteTile(
-                      text : note["text"],
-                      time: note["time"],
-                    ),
-                  );  
-                }
+            //     itemBuilder:(context, id){
+            //       Map<String,dynamic> note = Data[key]!["Notes"]![id];
+            //       return GestureDetector(
+            //         onTap: () => Navigator.push(
+            //           context, MaterialPageRoute(builder: (context)=>NotePage(keyText: key,id: id,))
+            //         ),
+            //         child: NoteTile(
+            //           text : note["text"],
+            //           time: note["time"],
+            //         ),
+            //       );  
+            //     }
                  
-              ),
-            ) 
-            : SizedBox(),
+            //   ),
+            // ) 
+            // : SizedBox(),
 
             // Items List
-            Data[key]!["Items"]!=null 
+            items!=[] 
             ? Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: Data[key]!["Items"]!.length,
-                
+                itemCount: items.length,
                 itemBuilder:(context, id){
-                  Map<String,dynamic> item = Data[key]!["Items"]![id];
+
                   return Slidable(
                     endActionPane: ActionPane(
                       motion: DrawerMotion(), 
@@ -165,10 +178,7 @@ class _ItemPageState extends State<ItemPage> {
                       ]
                     ),
 
-                    child: ItemTile(
-                      text : item["text"],
-                      check: item["check"],
-                    ),
+                    child: ItemTile(listId: widget.index, itemId: id),
                   );  
                 }
 
@@ -178,6 +188,8 @@ class _ItemPageState extends State<ItemPage> {
           ],
         ),
       ),
+
+      // floating button to create 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, color: Theme.of(context).colorScheme.inversePrimary,),

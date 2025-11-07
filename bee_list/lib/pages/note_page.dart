@@ -1,6 +1,5 @@
 import 'package:bee_list/components/delete_alert.dart';
 import 'package:bee_list/data.dart';
-import 'package:bee_list/pages/item_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

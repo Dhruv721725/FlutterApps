@@ -1,14 +1,19 @@
+import 'package:bee_list/components/db.dart';
 import 'package:bee_list/components/edit_item.dart';
 import 'package:bee_list/components/list_item_tile.dart';
-import 'package:bee_list/data.dart';
+import 'package:bee_list/components/models.dart';
 import 'package:bee_list/pages/item_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+class HomePage extends StatefulWidget{
+  @override
+  State<HomePage> createState() => _HomePageState();
+} 
 
-class HomePage extends StatelessWidget{
+class _HomePageState extends State<HomePage> {
+  List<ListItem> listItems = Db.getListItems();
+
   @override
   Widget build(BuildContext context) {
-    final data = Data;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -18,8 +23,9 @@ class HomePage extends StatelessWidget{
       body: Container(
         padding: EdgeInsets.all(12),
         child: ListView.builder(
-          itemCount: data.keys.length,
+          itemCount: listItems.length,
           itemBuilder: (context, int i){
+            ListItem lit = listItems[i];
             return GestureDetector(
               onTap: (){
                 Navigator.push(
@@ -27,8 +33,8 @@ class HomePage extends StatelessWidget{
                   MaterialPageRoute(builder:(context)=>ItemPage(index: i,)));
               },
               child: ListItemTile(
-                title: data.keys.toList()[i], 
-                date: DateTime.now()
+                title:lit.title, 
+                date: lit.time
               )
             );
           },
@@ -44,7 +50,13 @@ class HomePage extends StatelessWidget{
               title: "Title",
               controller: controller, 
               onSave: (){
-                print("Saved");
+                final title =  controller.text.trim().split("")[0].toUpperCase()+controller.text.trim().substring(1);
+                ListItem litem = new ListItem(title: title, time: DateTime.now());
+                setState((){
+                  Db.addListItem(litem);
+                  listItems = Db.getListItems();
+                });
+                Navigator.pop(context);
               }
             )
           );

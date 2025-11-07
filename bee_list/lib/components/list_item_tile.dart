@@ -1,5 +1,4 @@
-import 'package:bee_list/components/views.dart';
-import 'package:bee_list/pages/item_page.dart';
+import 'package:bee_list/components/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

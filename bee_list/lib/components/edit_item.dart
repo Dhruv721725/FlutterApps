@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class EditItem extends StatelessWidget {
-  TextEditingController controller;
-  String title;
-  Function() onSave;
-  EditItem({
+  final TextEditingController controller;
+  final String title;
+  final Function() onSave;
+  const EditItem({
     super.key,
     required this.title,
     required this.controller,
