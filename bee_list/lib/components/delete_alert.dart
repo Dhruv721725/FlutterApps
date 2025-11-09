@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DeleteAlert extends StatelessWidget {
   final String message;
   final Function()? onDelete;
-  DeleteAlert({
+  const DeleteAlert({
     super.key,
     required this.message,
     required this.onDelete,

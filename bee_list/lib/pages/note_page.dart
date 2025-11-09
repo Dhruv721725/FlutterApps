@@ -1,15 +1,17 @@
+import 'package:bee_list/components/db.dart';
 import 'package:bee_list/components/delete_alert.dart';
-import 'package:bee_list/data.dart';
+import 'package:bee_list/components/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NotePage extends StatefulWidget {
-  final String keyText;
-  final int id;
-  NotePage({
+  final int listId;
+  final int noteId;
+  final Db db;
+  const NotePage({
     super.key,
-    required this.keyText,
-    required this.id,
+    required this.listId,
+    required this.noteId,
+    required this.db,
   });
   
   @override
@@ -17,22 +19,35 @@ class NotePage extends StatefulWidget {
 }
 
 class _NotePageState extends State<NotePage> {
-  late TextEditingController _controller = new TextEditingController();
+  late Note note;
+  late List<Note> notes;
+  final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: Data[widget.keyText]!["Notes"]![widget.id]["text"]);
+    notes = widget.db.getNotes(widget.listId);
+    if (notes.length>widget.noteId) {
+      note = notes[widget.noteId];
+      _controller.text = note.text;
+    }else{
+      note = Note(text: "", time: DateTime.now());
+      widget.db.addNote(widget.listId, note);
+    }
+  }
+  
+  void saveNote(int noteId, note){
+    widget.db.saveNote(widget.listId, noteId, note);
   }
 
   void onDelete(){
+    Navigator.pop(context);
     showDialog(
       context: context, 
       builder: (context)=>DeleteAlert(
         message: "Are your sure?", 
         onDelete: (){
-          setState(() {
-            print("Deleting item");
-          });
+          widget.db.delNote(widget.listId, widget.noteId);
+          Navigator.pop(context);
         },
       ),
     );
@@ -40,20 +55,20 @@ class _NotePageState extends State<NotePage> {
 
   @override
   void dispose() {
-    saveNote();
+    note.text = _controller.text;
+    Future.microtask((){
+      saveNote(widget.noteId, note);
+    });
     _controller.dispose();
     super.dispose();
   }
 
-  void saveNote(){
-    Data[widget.keyText]!["Notes"]![widget.id]["text"]=_controller.text;
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.keyText} Note"),
-
+        title: Text("${widget.db.getListItems()[widget.listId]} Note"),
+    
         actions: [
           IconButton(
             onPressed: onDelete,
@@ -61,7 +76,7 @@ class _NotePageState extends State<NotePage> {
           )
         ],
       ),
-
+    
       body: Padding(
         padding: EdgeInsets.all(12),
         child: Container(
@@ -81,7 +96,7 @@ class _NotePageState extends State<NotePage> {
             textInputAction: TextInputAction.newline,
           
             decoration: InputDecoration(
-              hintText: "Write your note here...",
+              hintText: "Write your notes here...",
               border: InputBorder.none
             ),  
           ),

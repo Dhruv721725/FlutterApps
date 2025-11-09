@@ -1,9 +1,8 @@
-import 'package:bee_list/data.dart';
 import 'package:flutter/material.dart';
 
 class NotificationPage extends StatefulWidget{
   final String text;
-  NotificationPage({
+  const NotificationPage({
     super.key,
     required this.text,
   });
@@ -16,7 +15,7 @@ class _NotificationPageState extends State<NotificationPage> {
   late List<Map<String, dynamic>> notifications;
   @override 
   void initState() {
-    notifications = Data[widget.text]!["Notifications"]!; 
+    // notifications = Data[widget.text]!["Notifications"]!; 
     super.initState();
   } 
 

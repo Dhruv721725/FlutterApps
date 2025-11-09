@@ -1,20 +1,22 @@
 import 'package:bee_list/components/db.dart';
-import 'package:bee_list/components/delete_alert.dart';
 import 'package:bee_list/components/edit_item.dart';
 import 'package:bee_list/components/item_tile.dart';
 import 'package:bee_list/components/models.dart';
 import 'package:bee_list/components/note_tile.dart';
-import 'package:bee_list/data.dart';
 import 'package:bee_list/pages/note_page.dart';
 import 'package:bee_list/pages/notification_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
 
 class ItemPage extends StatefulWidget {
   final int index;
+  final Db db;
+  final void Function(int) onDelete;
   const ItemPage({
     super.key,
-    required this.index 
+    required this.index, 
+    required this.onDelete,
+    required this.db,
   });
   @override
   State<ItemPage> createState() => _ItemPageState();  
@@ -27,63 +29,43 @@ class _ItemPageState extends State<ItemPage> {
   late List<AppNotification> notifiers;
   @override 
   void initState() {
-    key=Db.getListItems().toList()[widget.index].title;
+    key=widget.db.getListItems().toList()[widget.index].title;
     super.initState();
-    items = Db.getItems(widget.index);
+    items = widget.db.getItems(widget.index);
+    notes = widget.db.getNotes(widget.index);
   }
 
+  // creating note
   void onCreateNote(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>NotePage(keyText: key, id: 0)));
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context)=>NotePage(
+        listId: widget.index, 
+        noteId: notes.length,
+        db: widget.db,
+      )
+      ));
   }
 
+  // creating item
   void onCreateItem(){
-    TextEditingController controller = new TextEditingController();
+    TextEditingController controller = TextEditingController();
     showDialog(context: context, 
       builder: (context)=>EditItem(title: "Item", controller: controller, 
         onSave: (){
-
           setState(() {
-            Db.addItem(widget.index, 
+            Provider.of<Db>(context,listen: false).addItem(widget.index, 
               Item(text: controller.text, 
                 check: false,
                 time: DateTime.now()
               )
             );
-            items = Db.getItems(widget.index);
+            items = widget.db.getItems(widget.index);
           });
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
       )
-    );
-  }
-
-  void onDelete(){
-    showDialog(
-      context: context, 
-      builder: (context)=>DeleteAlert(
-        message: "Are your sure?", 
-        onDelete: (){
-          setState(() {
-            print("Deleting item");
-          });
-        },
-      ),
-    );
-  }
-
-  void onEdit(int? id){
-    TextEditingController controller = new TextEditingController();
-    controller.text = id!=null?  Data[key]!["Items"]![id]["text"] : "";
-    showDialog(
-      context: context, 
-      builder: (context)=>EditItem(
-        onSave: (){
-          setState(() {
-            print("Saving Item");
-          });
-        },
-        title: "Edit Item",
-        controller: controller,
-      ),
     );
   }
 
@@ -92,10 +74,9 @@ class _ItemPageState extends State<ItemPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(key),
-
         actions: [
           IconButton(
-            onPressed: onDelete,
+            onPressed: ()=>widget.onDelete(widget.index),
             icon: Icon(Icons.delete)
           )
         ],
@@ -121,30 +102,27 @@ class _ItemPageState extends State<ItemPage> {
             // )
             // :SizedBox(),
             // // Notes 
-            // Data[key]!["Notes"]!=null 
-            // ? SizedBox(
-            //   height: 150,
-            //   child: ListView.builder(
-            //     shrinkWrap: true,
-            //     scrollDirection: Axis.horizontal,
-            //     itemCount: Data[key]!["Notes"]!.length,
-                
-            //     itemBuilder:(context, id){
-            //       Map<String,dynamic> note = Data[key]!["Notes"]![id];
-            //       return GestureDetector(
-            //         onTap: () => Navigator.push(
-            //           context, MaterialPageRoute(builder: (context)=>NotePage(keyText: key,id: id,))
-            //         ),
-            //         child: NoteTile(
-            //           text : note["text"],
-            //           time: note["time"],
-            //         ),
-            //       );  
-            //     }
-                 
-            //   ),
-            // ) 
-            // : SizedBox(),
+
+            SizedBox(
+              height: notes.isNotEmpty ? 150 : 0,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: notes.length,
+                itemBuilder:(context, id){
+                  Note note = notes[id];
+                  return GestureDetector(
+                    onTap: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (context)=>NotePage(listId: widget.index, noteId: id, db:widget.db))
+                    ),
+                    child: NoteTile(
+                      text : note.text,
+                      time: note.time,
+                    ),
+                  );  
+                } 
+              ),
+            ),
 
             // Items List
             items!=[] 
@@ -153,35 +131,12 @@ class _ItemPageState extends State<ItemPage> {
                 shrinkWrap: true,
                 itemCount: items.length,
                 itemBuilder:(context, id){
-
-                  return Slidable(
-                    endActionPane: ActionPane(
-                      motion: DrawerMotion(), 
-                      children: [
-
-                        SlidableAction(
-                          onPressed: (context)=>onEdit(id),
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        
-                        SlidableAction(
-                          onPressed: (context){},
-                          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-
-                      ]
-                    ),
-
-                    child: ItemTile(listId: widget.index, itemId: id),
+                  return ItemTile(
+                    listId: widget.index, 
+                    itemId: id,
+                    db: widget.db
                   );  
                 }
-
               ),
             ) 
             : Center(child: Text("No items to list.")),
@@ -201,6 +156,7 @@ class _ItemPageState extends State<ItemPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // buttton for creating Item
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(
@@ -212,6 +168,8 @@ class _ItemPageState extends State<ItemPage> {
                       child: Text("Create Item")
                     ),
                   ),
+
+                  // button for creating a note
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(

@@ -33,7 +33,7 @@ class ListItem{
 @HiveType(typeId: 1)
 class Item{
   @HiveField(0)
-  final String text;
+  String text;
   
   @HiveField(1)
   bool check;
@@ -51,11 +51,11 @@ class Item{
 @HiveType(typeId: 2)
 class Note{
   @HiveField(0)
-  final String text;
+  String text;
   
   @HiveField(1)
   final DateTime time;
-  const Note({
+  Note({
     required this.text,
     required this.time,
   });
@@ -65,16 +65,16 @@ class Note{
 @HiveType(typeId: 3)
 class AppNotification{
   @HiveField(0)
-  final String text;
+  String text;
   
   @HiveField(1)
-  final int day;
+  int day;
   
   @HiveField(2)
-  final int hr;
+  int hr;
   
   @HiveField(3)
-  final int min;
+  int min;
   
   @HiveField(4)
   final DateTime time;

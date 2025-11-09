@@ -1,12 +1,11 @@
 import 'package:bee_list/components/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NoteTile extends StatelessWidget {
   final String text;
   final DateTime time;
 
-  NoteTile({
+  const NoteTile({
     super.key,
     required this.text,
     required this.time,

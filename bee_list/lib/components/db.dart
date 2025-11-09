@@ -1,30 +1,63 @@
 import 'package:bee_list/components/models.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
 
-class Db {
+class Db extends ChangeNotifier{
   static final Box<ListItem> _box = Hive.box("taskifybox");
-  
-  static List<ListItem> getListItems()=> _box.values.toList();
-  static void addListItem(ListItem listItem){
+  // functions for list titles
+  List<ListItem> getListItems()=> _box.values.toList();
+  void addListItem(ListItem listItem){
     _box.add(listItem);
   }
+  void delListItem(int id){
+    _box.deleteAt(id);
+    notifyListeners();
+  }
+  void saveListItem(int id, ListItem lit){
+    _box.putAt(id, lit);
+  }
 
-  static List<Item> getItems(int id)=> _box.getAt(id)!.items;
-  static void addItem(int listId, Item item){
+  //  functions for list items
+  List<Item> getItems(int id)=> _box.getAt(id)!.items;
+  void addItem(int listId, Item item){
     ListItem lit= _box.getAt(listId)!;
     lit.items.add(item);
     _box.putAt(listId, lit);
   }
-  static void toggleCheck(int listId, int itemId){
+  void saveItem(int listId, int itemId, Item item){
+    ListItem lit= _box.getAt(listId)!;
+    lit.items[itemId] = item;
+    _box.putAt(listId, lit);
+  }
+  void delItem(int listId, int itemId){
+    ListItem lit= _box.getAt(listId)!;
+    lit.items.removeAt(itemId);
+    _box.putAt(listId, lit);
+    notifyListeners();
+  }
+  void toggleCheck(int listId, int itemId){
     ListItem lit= _box.getAt(listId)!;
     lit.items[itemId].check=!lit.items[itemId].check;
     _box.putAt(listId, lit);
   }
 
-  static List<Note> getNotes(int id)=> _box.getAt(id)!.notes;
-  static void addNote(int listId, Note note){
+  // functions for list notes
+  List<Note> getNotes(int id)=> _box.getAt(id)!.notes;
+  void addNote(int listId, Note note){
     ListItem lit= _box.getAt(listId)!;
     lit.notes.add(note);
     _box.putAt(listId, lit);
+  }
+  void saveNote(int listId, int noteId, Note note){
+    ListItem lit= _box.getAt(listId)!;
+    lit.notes[noteId] = note;
+    _box.putAt(listId, lit);
+    notifyListeners();
+  }
+  void delNote(int listId, int noteId){
+    ListItem lit= _box.getAt(listId)!;
+    lit.notes.removeAt(noteId);
+    _box.putAt(listId, lit);
+    notifyListeners();
   }
 }

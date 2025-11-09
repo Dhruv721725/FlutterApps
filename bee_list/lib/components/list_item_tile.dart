@@ -1,6 +1,5 @@
 import 'package:bee_list/components/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ListItemTile extends StatelessWidget{
   final String title;
