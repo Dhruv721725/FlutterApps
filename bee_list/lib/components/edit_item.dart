@@ -32,8 +32,7 @@ class EditItem extends StatelessWidget {
             borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary),
             borderRadius: BorderRadius.circular(12)
           ),
-          
-        ),
+        ), 
       ),
       actions: [
         ElevatedButton(

@@ -1,10 +1,10 @@
-import 'package:bee_list/components/db.dart';
+import 'package:bee_list/services/db.dart';
 import 'package:bee_list/components/edit_item.dart';
 import 'package:bee_list/components/item_tile.dart';
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:bee_list/components/note_tile.dart';
 import 'package:bee_list/pages/note_page.dart';
-import 'package:bee_list/pages/notification_page.dart';
+import 'package:bee_list/pages/reminders_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ class _ItemPageState extends State<ItemPage> {
   late String key;
   late List<Item> items;
   late List<Note> notes;
-  late List<AppNotification> notifiers;
+  late List<Reminder> reminders;
   @override 
   void initState() {
     key=widget.db.getListItems().toList()[widget.index].title;
@@ -87,21 +87,28 @@ class _ItemPageState extends State<ItemPage> {
         
         child: Column(
           children: [
-            // Data[key]!["Notifications"]!=null?
-            // GestureDetector(
-            //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage(text: key))),
-            //   child: Container(
-            //     padding: EdgeInsets.all(4),
-            //     margin: EdgeInsets.all(4),
-            //     decoration: BoxDecoration(
-            //       color: Theme.of(context).colorScheme.secondary,
-            //       borderRadius: BorderRadius.circular(12),
-            //     ),
-            //     child: Center(child: Text("Notifications")),
-            //   ),
-            // )
-            // :SizedBox(),
-            // // Notes 
+            
+// ---------------------------------------------------------
+// ---------Reminder Tile Widget Begins Here----------------
+// ---------------------------------------------------------
+
+            GestureDetector(
+              onTap: () => Navigator.push(context, 
+                MaterialPageRoute(builder: (context)=>RemindersPage(listId: widget.index))),
+              child: Container(
+                padding: EdgeInsets.all(12),
+                margin: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(child: Text("Reminders")),
+              ),
+            ),
+
+// ---------------------------------------------------------
+// ---------Note Tile Widget Begins Here--------------------
+// ---------------------------------------------------------
 
             SizedBox(
               height: notes.isNotEmpty ? 150 : 0,
@@ -124,7 +131,10 @@ class _ItemPageState extends State<ItemPage> {
               ),
             ),
 
-            // Items List
+// ---------------------------------------------------------
+// ---------Item Tile Widget Begins Here--------------------
+// ---------------------------------------------------------
+            
             items!=[] 
             ? Expanded(
               child: ListView.builder(
@@ -135,7 +145,7 @@ class _ItemPageState extends State<ItemPage> {
                     listId: widget.index, 
                     itemId: id,
                     db: widget.db
-                  );  
+                  );
                 }
               ),
             ) 
@@ -144,7 +154,11 @@ class _ItemPageState extends State<ItemPage> {
         ),
       ),
 
-      // floating button to create 
+
+// ---------------------------------------------------------
+// ---floating button Tile Widget Begins Here---------------
+// ---------------------------------------------------------
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, color: Theme.of(context).colorScheme.inversePrimary,),

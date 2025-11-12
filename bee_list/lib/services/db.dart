@@ -1,4 +1,4 @@
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
 

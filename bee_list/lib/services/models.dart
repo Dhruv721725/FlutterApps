@@ -2,7 +2,7 @@ import 'package:hive_flutter/adapters.dart';
 part 'models.g.dart';
 
 List months()=>["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-List weekDays()=>["Sunday", "Monday", "Tuesday", "Wedneday", "Thursday", "Friday", "Saturday", "Everyday"];
+List weekDays()=>["Everyday","Sunday", "Monday", "Tuesday", "Wedneday", "Thursday", "Friday", "Saturday"];
 
 @HiveType(typeId: 0)
 class ListItem{
@@ -19,7 +19,7 @@ class ListItem{
   List<Note> notes;
   
   @HiveField(4)
-  List<AppNotification> notifications;
+  List<Reminder> notifications;
 
   ListItem({
     required this.title,
@@ -63,27 +63,35 @@ class Note{
 
 
 @HiveType(typeId: 3)
-class AppNotification{
+class Reminder{
   @HiveField(0)
-  String text;
-  
+  String title;
+
   @HiveField(1)
-  int day;
-  
-  @HiveField(2)
-  int hr;
+  String body;
   
   @HiveField(3)
-  int min;
+  int hr;
   
   @HiveField(4)
+  int min;
+
+  @HiveField(5)
+  int? day;
+  
+  @HiveField(6)
+  DateTime? date;
+  
+  @HiveField(7)
   final DateTime time;
 
-  AppNotification({
-    required this.text,
-    required this.day,
+  Reminder({
+    required this.title,
+    required this.body,
     required this.hr,
     required this.min,
+    this.day,
+    this.date,
     required this.time,
   });
 }

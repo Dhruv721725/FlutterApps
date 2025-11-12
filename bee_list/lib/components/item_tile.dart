@@ -1,9 +1,10 @@
-import 'package:bee_list/components/db.dart';
+import 'package:bee_list/services/db.dart';
 import 'package:bee_list/components/delete_alert.dart';
 import 'package:bee_list/components/edit_item.dart';
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
 
 class ItemTile extends StatefulWidget{
   int listId;
@@ -21,16 +22,8 @@ class ItemTile extends StatefulWidget{
 }
 
 class _ItemTileState extends State<ItemTile> {
-  late Item item;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    item=widget.db.getItems(widget.listId)[widget.itemId];
-  }
-
-  void onEdit(){
+  void onEdit(Item item){
     TextEditingController controller = TextEditingController();
     controller.text = item.text;
     showDialog(context: context, 
@@ -49,7 +42,7 @@ class _ItemTileState extends State<ItemTile> {
     );
   }
 
-  void onDel(){
+  void onDelItem(){
     showDialog(
       context: context, 
       builder: (context)=>DeleteAlert(
@@ -64,12 +57,14 @@ class _ItemTileState extends State<ItemTile> {
 
   @override
   Widget build(BuildContext context) {
+    final db=context.watch<Db>();
+    Item item = db.getItems(widget.listId)[widget.itemId];
     return Slidable(
       endActionPane: ActionPane(
         motion: DrawerMotion(), 
         children: [
           SlidableAction(
-            onPressed: (context)=>onEdit(),
+            onPressed: (context)=>onEdit(item),
             backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
             foregroundColor: Colors.white,
             icon: Icons.edit,
@@ -77,7 +72,7 @@ class _ItemTileState extends State<ItemTile> {
           ),
           
           SlidableAction(
-            onPressed: (context)=>onDel(),
+            onPressed: (context)=>onDelItem(),
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             foregroundColor: Colors.white,
             icon: Icons.delete,

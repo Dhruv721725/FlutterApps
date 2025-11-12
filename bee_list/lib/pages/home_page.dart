@@ -1,8 +1,8 @@
-import 'package:bee_list/components/db.dart';
+import 'package:bee_list/services/db.dart';
 import 'package:bee_list/components/delete_alert.dart';
 import 'package:bee_list/components/edit_item.dart';
 import 'package:bee_list/components/list_item_tile.dart';
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:bee_list/pages/item_page.dart';
 import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget{

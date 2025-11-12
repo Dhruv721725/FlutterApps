@@ -1,4 +1,4 @@
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:flutter/material.dart';
 
 class NoteTile extends StatelessWidget {

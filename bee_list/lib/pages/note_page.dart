@@ -1,6 +1,6 @@
-import 'package:bee_list/components/db.dart';
+import 'package:bee_list/services/db.dart';
 import 'package:bee_list/components/delete_alert.dart';
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:flutter/material.dart';
 
 class NotePage extends StatefulWidget {

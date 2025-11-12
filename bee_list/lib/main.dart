@@ -1,5 +1,5 @@
-import 'package:bee_list/components/db.dart';
-import 'package:bee_list/components/models.dart';
+import 'package:bee_list/services/db.dart';
+import 'package:bee_list/services/models.dart';
 import 'package:bee_list/pages/home_page.dart';
 import 'package:bee_list/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ void main()async{
   Hive.registerAdapter(ListItemAdapter());
   Hive.registerAdapter(ItemAdapter());
   Hive.registerAdapter(NoteAdapter());
-  Hive.registerAdapter(AppNotificationAdapter());
+  Hive.registerAdapter(ReminderAdapter());
   await Hive.openBox<ListItem>('taskifybox');
   
   runApp(
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Db db = Provider.of<Db>(context);
     return MaterialApp(
-      title: 'Bee\'s List',
+      title: 'Taskify',
       debugShowCheckedModeBanner: false,
       theme: theme,
       home: HomePage(db:db),

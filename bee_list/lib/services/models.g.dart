@@ -22,7 +22,7 @@ class ListItemAdapter extends TypeAdapter<ListItem> {
     )
       ..items = (fields[2] as List).cast<Item>()
       ..notes = (fields[3] as List).cast<Note>()
-      ..notifications = (fields[4] as List).cast<AppNotification>();
+      ..notifications = (fields[4] as List).cast<Reminder>();
   }
 
   @override
@@ -129,38 +129,44 @@ class NoteAdapter extends TypeAdapter<Note> {
           typeId == other.typeId;
 }
 
-class AppNotificationAdapter extends TypeAdapter<AppNotification> {
+class ReminderAdapter extends TypeAdapter<Reminder> {
   @override
   final int typeId = 3;
 
   @override
-  AppNotification read(BinaryReader reader) {
+  Reminder read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AppNotification(
-      text: fields[0] as String,
-      day: fields[1] as int,
-      hr: fields[2] as int,
-      min: fields[3] as int,
-      time: fields[4] as DateTime,
+    return Reminder(
+      title: fields[0] as String,
+      body: fields[1] as String,
+      hr: fields[3] as int,
+      min: fields[4] as int,
+      day: fields[5] as int?,
+      date: fields[6] as DateTime?,
+      time: fields[7] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, AppNotification obj) {
+  void write(BinaryWriter writer, Reminder obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
-      ..write(obj.text)
+      ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.day)
-      ..writeByte(2)
-      ..write(obj.hr)
+      ..write(obj.body)
       ..writeByte(3)
-      ..write(obj.min)
+      ..write(obj.hr)
       ..writeByte(4)
+      ..write(obj.min)
+      ..writeByte(5)
+      ..write(obj.day)
+      ..writeByte(6)
+      ..write(obj.date)
+      ..writeByte(7)
       ..write(obj.time);
   }
 
@@ -170,7 +176,7 @@ class AppNotificationAdapter extends TypeAdapter<AppNotification> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppNotificationAdapter &&
+      other is ReminderAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
