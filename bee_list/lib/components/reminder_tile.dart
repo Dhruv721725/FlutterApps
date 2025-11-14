@@ -33,7 +33,7 @@ class _ReminderTileState extends State<ReminderTile> {
           motion: DrawerMotion(), 
           children: [
             SlidableAction(
-              onPressed:(context)=>widget.onEdit,
+              onPressed:(context){widget.onEdit();},
               backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
               foregroundColor: Colors.white,
               icon: Icons.edit,
@@ -41,7 +41,7 @@ class _ReminderTileState extends State<ReminderTile> {
               borderRadius: BorderRadius.circular(20),
             ),
             SlidableAction(
-              onPressed: (context)=>widget.onDel,
+              onPressed: (context){widget.onDel();},
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               foregroundColor: Colors.white,
               icon: Icons.delete,
@@ -63,13 +63,19 @@ class _ReminderTileState extends State<ReminderTile> {
           child: ListTile(
             title: Text(widget.reminder.title),
             subtitle: Column(            
+              crossAxisAlignment:CrossAxisAlignment.start ,
               children: [
                 Text(widget.reminder.body),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:[
-                    Text(dayt),
-                    Text("${widget.reminder.hr}:${widget.reminder.min}")
+                    Text(
+                      dayt,
+                      style: TextStyle(
+                        fontSize: 12
+                      ),
+                    ),
+                    Text(TimeOfDay(hour: widget.reminder.hr, minute: widget.reminder.min) .format(context)),
                   ]
                 )
               ],

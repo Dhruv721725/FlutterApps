@@ -22,7 +22,7 @@ class ListItemAdapter extends TypeAdapter<ListItem> {
     )
       ..items = (fields[2] as List).cast<Item>()
       ..notes = (fields[3] as List).cast<Note>()
-      ..notifications = (fields[4] as List).cast<Reminder>();
+      ..reminders = (fields[4] as List).cast<Reminder>();
   }
 
   @override
@@ -38,7 +38,7 @@ class ListItemAdapter extends TypeAdapter<ListItem> {
       ..writeByte(3)
       ..write(obj.notes)
       ..writeByte(4)
-      ..write(obj.notifications);
+      ..write(obj.reminders);
   }
 
   @override
@@ -142,8 +142,9 @@ class ReminderAdapter extends TypeAdapter<Reminder> {
     return Reminder(
       title: fields[0] as String,
       body: fields[1] as String,
-      hr: fields[3] as int,
-      min: fields[4] as int,
+      hr: fields[2] as int,
+      min: fields[3] as int,
+      isOn: fields[4] as bool,
       day: fields[5] as int?,
       date: fields[6] as DateTime?,
       time: fields[7] as DateTime,
@@ -153,15 +154,17 @@ class ReminderAdapter extends TypeAdapter<Reminder> {
   @override
   void write(BinaryWriter writer, Reminder obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.body)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.hr)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.min)
+      ..writeByte(4)
+      ..write(obj.isOn)
       ..writeByte(5)
       ..write(obj.day)
       ..writeByte(6)

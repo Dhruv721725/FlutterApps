@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 
 class Db extends ChangeNotifier{
   static final Box<ListItem> _box = Hive.box("taskifybox");
+
   // functions for list titles
   List<ListItem> getListItems()=> _box.values.toList();
   void addListItem(ListItem listItem){
@@ -57,6 +58,27 @@ class Db extends ChangeNotifier{
   void delNote(int listId, int noteId){
     ListItem lit= _box.getAt(listId)!;
     lit.notes.removeAt(noteId);
+    _box.putAt(listId, lit);
+    notifyListeners();
+  }
+
+  // functions for remianders
+  List<Reminder> getReminders(int id)=> _box.getAt(id)!.reminders;
+  void addReminder(int listId, Reminder rmndr){
+    ListItem lit= _box.getAt(listId)!;
+    lit.reminders.add(rmndr);
+    _box.putAt(listId, lit);
+    notifyListeners();
+  }
+  void saveReminder(int listId, int rmndrId, Reminder rmndr){
+    ListItem lit= _box.getAt(listId)!;
+    lit.reminders[rmndrId] = rmndr;
+    _box.putAt(listId, lit);
+    notifyListeners();
+  }
+  void delReminder(int listId, int rmndrId){
+    ListItem lit= _box.getAt(listId)!;
+    lit.reminders.removeAt(rmndrId);
     _box.putAt(listId, lit);
     notifyListeners();
   }

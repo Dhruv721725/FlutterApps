@@ -26,7 +26,6 @@ class _ItemPageState extends State<ItemPage> {
   late String key;
   late List<Item> items;
   late List<Note> notes;
-  late List<Reminder> reminders;
   @override 
   void initState() {
     key=widget.db.getListItems().toList()[widget.index].title;
@@ -94,7 +93,7 @@ class _ItemPageState extends State<ItemPage> {
 
             GestureDetector(
               onTap: () => Navigator.push(context, 
-                MaterialPageRoute(builder: (context)=>RemindersPage(listId: widget.index))),
+                MaterialPageRoute(builder: (context)=>RemindersPage(listId: widget.index, db: widget.db,))),
               child: Container(
                 padding: EdgeInsets.all(12),
                 margin: EdgeInsets.all(4),

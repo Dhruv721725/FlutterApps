@@ -1,26 +1,28 @@
+import 'dart:ui';
 import 'package:bee_list/services/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class EditReminder extends StatefulWidget {
   String title;
-  TextEditingController titleController;
-  TextEditingController bodyController;
-  void Function() onSave;
+  void Function(Reminder) onSave;
   DateTime? date;
   int? day;
-  int hr;
-  int min;
+  String? reminderTitle;
+  String? reminderBody;
+  TimeOfDay rmndrTm;
+  bool isOn;
 
   EditReminder({
     super.key,
     required this.title,
-    required this.titleController,
-    required this.bodyController,
     this.date,
     this.day,
-    required this.hr,
-    required this.min,
+    this.reminderTitle,
+    this.reminderBody,
+    required this.rmndrTm,
+    required this.isOn,
     required this.onSave,
   });
 
@@ -33,12 +35,18 @@ class _EditReminderState extends State<EditReminder> {
   late String selectedMode;
   late DateTime pickedDate;
   late int pickedDay;
+  late TimeOfDay pickedTime;
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _body = TextEditingController();
 
   @override
   void initState() {
     selectedMode = widget.day==null? 'date' : 'day';
     pickedDate = widget.date??DateTime.now();
     pickedDay = widget.day??0;
+    pickedTime = widget.rmndrTm;
+    _title.text= widget.reminderTitle??"";
+    _body.text= widget.reminderBody??"";
     super.initState();
   }
 
@@ -46,16 +54,22 @@ class _EditReminderState extends State<EditReminder> {
   Widget build(BuildContext context) {
    
     String date = "${pickedDate.day} ${months()[pickedDate.month-1]}, ${pickedDate.year}";
-   
+    String time = pickedTime.format(context);
     return AlertDialog(
       insetPadding: EdgeInsets.all(4),
       icon: Icon(Icons.notifications),
       title: Text(widget.title),
       content:Column(
           children: [
+
+// ---------------------------------------------------------
+// -------- Title ------------------------------------------
+// ---------------------------------------------------------
+
             TextField(
               maxLines: 1,
-              controller: widget.titleController,
+              selectionWidthStyle: BoxWidthStyle.tight,
+              controller: _title,
               cursorColor: Theme.of(context).colorScheme.inversePrimary,
               decoration: InputDecoration(
                 hint: Text("Enter title..."),
@@ -74,9 +88,14 @@ class _EditReminderState extends State<EditReminder> {
 
             SizedBox(height: 8,),
 
+
+// ---------------------------------------------------------
+// -------- Content ----------------------------------------
+// ---------------------------------------------------------
+
             TextField(
               maxLines: 3,
-              controller: widget.bodyController,
+              controller: _body,
               cursorColor: Theme.of(context).colorScheme.inversePrimary,
               decoration: InputDecoration(
                 hint: Text("Enter content..."),
@@ -94,6 +113,10 @@ class _EditReminderState extends State<EditReminder> {
             ),
             
             SizedBox(height: 8,),
+
+// ---------------------------------------------------------
+// -------- Day/Date ---------------------------------------
+// ---------------------------------------------------------
 
             SegmentedButton<String>(
               segments: const [
@@ -144,20 +167,54 @@ class _EditReminderState extends State<EditReminder> {
                   setState(() {pickedDay = value??0;});
                 },
               ),
-
-              SizedBox(height: 8,),
-
-              ListTile(
-                title: Text("Time"),
-              )
             ],
+
+            SizedBox(height: 8,),
+
+// ---------------------------------------------------------
+// -------- Time -------------------------------------------
+// ---------------------------------------------------------
+
+            Text("Choose the reminder time:"),
+            ListTile(
+              title: Text(time),
+              trailing: IconButton(
+                onPressed: ()async{
+                  TimeOfDay? rmndrTime = await showTimePicker(
+                    context: context, 
+                    initialTime: pickedTime,
+                  );
+                  if (rmndrTime!=null) {
+                    setState(() {
+                      pickedTime = rmndrTime;
+                    });
+                  }
+                }, 
+                icon: Icon(Icons.alarm)
+              ),
+            )
           ],
         ),
+
       actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
         ActionChip(
           label:Text("Save"),
-          onPressed: widget.onSave, 
+          onPressed: (){
+            Reminder reminder = Reminder(
+              title: _title.text, 
+              body: _body.text, 
+              hr: pickedTime.hour,
+              min: pickedTime.minute, 
+              isOn: true, 
+              time: DateTime.now(),
+              date: selectedMode=='date'? pickedDate:null,
+              day:selectedMode=='day'? pickedDay:null,
+            );
+            widget.onSave(
+              reminder
+            );
+          }, 
         ),
         
         ActionChip(

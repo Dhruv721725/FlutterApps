@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 part 'models.g.dart';
 
@@ -19,14 +20,14 @@ class ListItem{
   List<Note> notes;
   
   @HiveField(4)
-  List<Reminder> notifications;
+  List<Reminder> reminders;
 
   ListItem({
     required this.title,
     required this.time,
   }): items = [],
       notes = [],
-      notifications = [];
+      reminders = [];
 }
 
 
@@ -70,11 +71,14 @@ class Reminder{
   @HiveField(1)
   String body;
   
-  @HiveField(3)
+  @HiveField(2)
   int hr;
+
+  @HiveField(3)
+  int min;
   
   @HiveField(4)
-  int min;
+  bool isOn;
 
   @HiveField(5)
   int? day;
@@ -90,6 +94,7 @@ class Reminder{
     required this.body,
     required this.hr,
     required this.min,
+    required this.isOn,
     this.day,
     this.date,
     required this.time,
