@@ -87,8 +87,11 @@ class Reminder{
   DateTime? date;
   
   @HiveField(7)
-  final DateTime time;
+  late DateTime time;
 
+  @HiveField(8)
+  late int id;
+  
   Reminder({
     required this.title,
     required this.body,
@@ -97,6 +100,8 @@ class Reminder{
     required this.isOn,
     this.day,
     this.date,
-    required this.time,
-  });
+  }){
+    id = DateTime.now().millisecondsSinceEpoch.remainder(100000);
+    time = DateTime.now();
+  }
 }

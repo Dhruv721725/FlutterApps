@@ -1,4 +1,5 @@
 import 'package:bee_list/services/models.dart';
+import 'package:bee_list/services/notification_services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -7,6 +8,7 @@ class Db extends ChangeNotifier{
 
   // functions for list titles
   List<ListItem> getListItems()=> _box.values.toList();
+  
   void addListItem(ListItem listItem){
     _box.add(listItem);
   }
@@ -20,6 +22,7 @@ class Db extends ChangeNotifier{
 
   //  functions for list items
   List<Item> getItems(int id)=> _box.getAt(id)!.items;
+
   void addItem(int listId, Item item){
     ListItem lit= _box.getAt(listId)!;
     lit.items.add(item);
@@ -44,6 +47,7 @@ class Db extends ChangeNotifier{
 
   // functions for list notes
   List<Note> getNotes(int id)=> _box.getAt(id)!.notes;
+
   void addNote(int listId, Note note){
     ListItem lit= _box.getAt(listId)!;
     lit.notes.add(note);
@@ -64,22 +68,41 @@ class Db extends ChangeNotifier{
 
   // functions for remianders
   List<Reminder> getReminders(int id)=> _box.getAt(id)!.reminders;
-  void addReminder(int listId, Reminder rmndr){
+  
+  void addReminder(int listId, Reminder reminder){
     ListItem lit= _box.getAt(listId)!;
-    lit.reminders.add(rmndr);
+    lit.reminders.add(reminder);
     _box.putAt(listId, lit);
+    
+    if (reminder.date==null) {
+      if (reminder.day==0){
+        NotificationServices().scheduleDailyReminder(reminder);
+      }else{
+        NotificationServices().scheduleWeeklyReminder(reminder);
+      }
+    }else{
+      NotificationServices().scheduleFixedReminder(reminder);
+    }
+    
     notifyListeners();
   }
-  void saveReminder(int listId, int rmndrId, Reminder rmndr){
+  void saveReminder(int listId, int rmndrId, Reminder reminder){
     ListItem lit= _box.getAt(listId)!;
-    lit.reminders[rmndrId] = rmndr;
+    lit.reminders[rmndrId] = reminder;
     _box.putAt(listId, lit);
+
+    NotificationServices().scheduleDailyReminder(reminder);
+
     notifyListeners();
   }
   void delReminder(int listId, int rmndrId){
     ListItem lit= _box.getAt(listId)!;
+    int reminderId = lit.reminders[rmndrId].id;
     lit.reminders.removeAt(rmndrId);
     _box.putAt(listId, lit);
+
+    NotificationServices().cancelReminder(reminderId);
+
     notifyListeners();
   }
 }

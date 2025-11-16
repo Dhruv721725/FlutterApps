@@ -207,7 +207,6 @@ class _EditReminderState extends State<EditReminder> {
               hr: pickedTime.hour,
               min: pickedTime.minute, 
               isOn: true, 
-              time: DateTime.now(),
               date: selectedMode=='date'? pickedDate:null,
               day:selectedMode=='day'? pickedDay:null,
             );

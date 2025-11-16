@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class RemindersPage extends StatefulWidget{
   final int listId;
   final Db db;
-  RemindersPage({
+  const RemindersPage({
     super.key,
     required this.listId,
     required this.db,
@@ -42,6 +42,7 @@ class _RemindersPageState extends State<RemindersPage> {
     Reminder rmndr = rmndrs[rmdrId];
     _title.text=rmndr.title;
     _body.text=rmndr.body;
+    print(rmndr.id);
     showDialog(
       context: context, 
       builder: (context)=>EditReminder(
