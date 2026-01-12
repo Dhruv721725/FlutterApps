@@ -13,6 +13,11 @@ class Db extends ChangeNotifier{
     _box.add(listItem);
   }
   void delListItem(int id){
+    List<Reminder> reminders = getReminders(id);
+    for (var reminder in reminders) {
+      int rmdId = reminder.id;
+      NotificationServices().cancelReminder(rmdId);
+    }
     _box.deleteAt(id);
     notifyListeners();
   }

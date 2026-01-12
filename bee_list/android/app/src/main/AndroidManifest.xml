@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:label="Taskify"
@@ -22,6 +24,19 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".AlarmScreen"
+            android:exported="false"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/LaunchTheme">
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+            </intent-filter>
+
+        </activity>        
+        <!-- Notification services ends here -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -44,6 +59,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

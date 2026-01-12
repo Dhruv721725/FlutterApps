@@ -5,6 +5,7 @@ import 'package:bee_list/services/notification_services.dart';
 import 'package:bee_list/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,7 @@ void main()async{
   Hive.registerAdapter(ReminderAdapter());
   await Hive.openBox<ListItem>('taskifybox');
   NotificationServices().init();
-  
+  await Permission.systemAlertWindow.request();
   runApp(
     ChangeNotifierProvider(
       create: (_)=>Db(),

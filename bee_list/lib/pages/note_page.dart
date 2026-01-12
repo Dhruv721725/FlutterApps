@@ -67,7 +67,7 @@ class _NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.db.getListItems()[widget.listId]} Note"),
+        title: Text("${widget.db.getListItems()[widget.listId].title} Note"),
     
         actions: [
           IconButton(

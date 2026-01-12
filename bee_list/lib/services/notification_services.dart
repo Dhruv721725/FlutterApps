@@ -6,44 +6,92 @@ import 'package:timezone/data/latest.dart' as tzd;
 
 class NotificationServices {
   static final FlutterLocalNotificationsPlugin _flnp = FlutterLocalNotificationsPlugin();
-  Future<void> init() async{
-    const AndroidInitializationSettings androidInit = AndroidInitializationSettings("@mipmap/ic_launcher");
-    const InitializationSettings initSettings = InitializationSettings(android: androidInit);
-    
-    await _flnp.initialize(initSettings);
-    tzd.initializeTimeZones();
-  }
+  Future<void> init() async {
+  const androidInit = AndroidInitializationSettings("@mipmap/ic_launcher");
+  const initSettings = InitializationSettings(android: androidInit);
 
-  static NotificationDetails _details(){
-    return const NotificationDetails(
-      android: AndroidNotificationDetails(
+  await _flnp.initialize(initSettings);
+
+  tzd.initializeTimeZones();
+
+  // 🔥 REQUIRED for full-screen notifications
+  await _flnp
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'daily_channel',          // Must match your NotificationDetails
+          'Daily Reminders',
+          importance: Importance.max,
+          playSound: true,
+        ),
+      );
+
+  // OPTIONAL but recommended: also create channels for weekly + fixed
+  await _flnp
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'weekly_channel',
+          'Weekly Reminders',
+          importance: Importance.high,
+          playSound: true,
+        ),
+      );
+
+  await _flnp
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'fixed_channel',
+          'Fixed Reminders',
+          importance: Importance.high,
+          playSound: true,
+        ),
+      );
+}
+
+  static AndroidNotificationDetails _details(){
+    return const AndroidNotificationDetails(
         'daily_channel',
         'Daily Reminders',
         importance: Importance.max,
         priority: Priority.high,
-      )
+        channelDescription: 'High priority sound + popup',
+        playSound: true,
+        fullScreenIntent: true,
+        visibility: NotificationVisibility.public,
+        category: AndroidNotificationCategory.alarm,
     );
   }
 
-  static NotificationDetails _weeklyReminderDetails(){
-    return const NotificationDetails(
-      android: AndroidNotificationDetails(
+  static AndroidNotificationDetails _weeklyReminderDetails(){
+    return const AndroidNotificationDetails(
         'weekly_channel', 
         'Weekly Reminders',
         importance: Importance.high,
         priority: Priority.high,
-      )
+        channelDescription: 'High priority sound + popup',
+        playSound: true,
+        fullScreenIntent: true,
+        visibility: NotificationVisibility.public,
+        category: AndroidNotificationCategory.alarm,
     );
   }
 
-  static NotificationDetails _fixedReminderDetails(){
-    return const NotificationDetails(
-      android: AndroidNotificationDetails(
+  static AndroidNotificationDetails _fixedReminderDetails(){
+    return const AndroidNotificationDetails(
         'fixed_channel', 
         'Fixed Reminders',
         importance: Importance.high,
         priority: Priority.high,
-      )
+        channelDescription: 'High priority sound + popup',
+        playSound: true,
+        fullScreenIntent: true,
+        visibility: NotificationVisibility.public,
+        category: AndroidNotificationCategory.alarm,
     );
   }
 
@@ -63,7 +111,7 @@ class NotificationServices {
       reminder.title, 
       reminder.body, 
       tz.TZDateTime.from(scheduled, tz.local), 
-      _details(), 
+      NotificationDetails(android: _details()), 
       
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time, //daily repeat
@@ -91,7 +139,7 @@ class NotificationServices {
       reminder.title, 
       reminder.body, 
       tz.TZDateTime.from(scheduled, tz.local), 
-      _weeklyReminderDetails(), 
+      NotificationDetails(android:_weeklyReminderDetails()), 
       
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime, //weekly repeat
@@ -109,7 +157,7 @@ class NotificationServices {
       reminder.title, 
       reminder.body, 
       tz.TZDateTime.from(scheduled, tz.local), 
-      _fixedReminderDetails(), 
+      NotificationDetails(android:_fixedReminderDetails()), 
       
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dateAndTime, //fixed date and time
